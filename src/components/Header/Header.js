@@ -5,30 +5,33 @@ import {useLocation, Link} from 'react-router-dom';
 
 function Header({isLoggedIn, onLogIn}) {
   const location = useLocation();
+
+  function Logo() {
+    return (
+      <Link to={'/'}><img className='logo' alt='Логотип проекта' src={logo}/></Link>
+    )
+  }
+
   if (location.pathname === '/' || location.pathname === '/saved-movies' ||
   location.pathname === '/movies' || location.pathname === '/profile') {
     return(
       <header className={`header ${(!isLoggedIn)? 'header_promo': ''}`}>
-        <div className='header__section section  section_narrow '>
-          <Link to={'/'}><img className='logo' alt='Логотип проекта' src={logo}/></Link>
+        <div className='section section_narrow section_type_header '>
+          <Logo />
           <Navigation isLoggedIn={isLoggedIn} onLogIn={onLogIn}/>
         </div>
       </header>
     )
-  } else if (location.pathname === '/signup') {
+  } else if (location.pathname === '/signup' || location.pathname === '/signin') {
     return (
-      <header>
-
-      </header>
-    )
-  } else if (location.pathname === '/signin') {
-    return (
-      <header>
-
+      <header className='header'>
+        <div className='header__section header__section_type_signup section section_superNarrow'>
+          <Logo />
+        </div>
       </header>
     )
   }
-  return
+  return null
 }
 
 export default Header;

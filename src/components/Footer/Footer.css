@@ -4,10 +4,18 @@
   width: 100%;
 }
 
-.footer__section {
+.section_type_footer {
   display: flex;
   flex-direction: column;
   width: 100%;
+}
+
+.section_type_signup {
+  background-color: rgba(255, 255, 255, 1);
+  margin: 16px auto 70px;
+  display: flex;
+  justify-content: center;
+  gap: 6px;
 }
 
 .footer__heading {
@@ -58,6 +66,26 @@
 .footer__logout-link:hover  {
   color: rgba(238, 52, 101, .7);
   cursor: pointer;
+}
+
+.footer__auth-text {
+  font-size: 14px;
+  line-height: 1.2;
+}
+
+.footer__auth-text_type_question {
+  color: rgba(160, 160, 160, 1);
+}
+
+.footer__auth-text_type_link {
+  text-decoration: none;
+  color: rgba(52, 86, 243, 1);
+  transition: color .3s ease;
+}
+
+.footer__auth-text_type_link:hover {
+  cursor: pointer;
+  color: rgba(52, 86, 243, .7);
 }
 
 

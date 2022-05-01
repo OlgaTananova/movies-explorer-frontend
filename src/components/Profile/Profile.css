@@ -45,6 +45,7 @@
   border: none;
   padding: 0;
   color: rgba(0, 0, 0, 1);
+  transition: background-color .3s ease;
 }
 
 .profile-form__input::placeholder {
@@ -64,7 +65,7 @@
 }
 
 .profile-form__input:focus {
-  background-color: rgba(244, 244, 244, 1);
+  background-color: rgba(221, 222, 227, 1);
   border-radius: 2px;
 }
 
