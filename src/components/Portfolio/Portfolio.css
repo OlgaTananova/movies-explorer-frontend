@@ -1,0 +1,45 @@
+.portfolio {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+}
+
+.portfolio__heading {
+  font-size: 18px;
+  line-height: 1.11;
+  color: rgba(160, 160, 160, 1);
+  font-weight: 400;
+  margin: 0;
+}
+
+.portfolio__links {
+  margin-top: 50px;
+}
+
+.portfolio__link {
+  text-decoration: none;
+  display: block;
+  width: 100%;
+  color: rgba(0, 0, 0, 1);
+  font-size: 30px;
+  line-height: 1.66;
+  padding-bottom: 19px;
+  border-bottom: 1px solid rgba(232, 232, 232, 1);
+  position: relative;
+  transition: opacity .3s ease;
+}
+
+.portfolio__link:after {
+  content: url('../../images/portfolio_arrow.svg');
+  position: absolute;
+  right: 0;
+}
+
+.portfolio__link:hover {
+  cursor: pointer;
+  opacity: .7;
+}
+
+.portfolio__link_last {
+  border-bottom: none;
+}

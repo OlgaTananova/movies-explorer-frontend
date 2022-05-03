@@ -1,0 +1,51 @@
+.techs {
+  display: flex;
+  width: 100%;
+  background-color: rgba(245, 245, 245, 1);
+}
+
+.section__heading_type_techs {
+  align-self: flex-start;
+}
+
+.section_type_techs {
+  flex-direction: column;
+  align-items: center;
+  margin-top: 100px;
+  margin-bottom: 100px;
+}
+
+.techs__subheading {
+  font-size: 50px;
+  line-height: 1.16;
+  font-weight: 400;
+  margin: 90px auto 0;
+  letter-spacing: -0.04em;
+}
+
+.techs__description {
+  width: 460px;
+  font-size: 14px;
+  line-height: 1.4;
+  letter-spacing: -0.04em;
+  margin: 26px auto 100px;
+  text-align: center;
+}
+
+.techs__list {
+  margin: 0;
+  padding: 0;
+  display: flex;
+  gap: 10px;
+}
+
+.tech__list-item {
+  background-color: rgba(232, 232, 232, 1);
+  border-radius: 10px;
+  display: block;
+  font-size: 14px;
+  line-height: 1.2;
+  padding: 21px 0;
+  width: 90px;
+  text-align: center;
+}

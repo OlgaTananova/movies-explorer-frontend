@@ -55,7 +55,7 @@ function App() {
    <>
      <Header isLoggedIn={isLoggedIn} onLogIn={handleLogIn}/>
     <Routes>
-      <Route path={'/'} element={<Main />}> </Route>
+      <Route path={'/'} element={<Main isLoggedIn={isLoggedIn}/>}> </Route>
       <Route path={'/movies'} element={<Movies/>}> </Route>
       <Route path={'/saved-movies'} element={<SavedMovies/>}> </Route>
       <Route path={'/profile'} element={<Profile
@@ -66,7 +66,7 @@ function App() {
       <Route path={'/signup'} element={<Register/>}> </Route>
       <Route path={'/signin'} element={<Login/>}> </Route>
       <Route path={'/404'} element={<NotFound/>}> </Route>
-      <Route path={'*'} element={<NotFound />}> </Route>
+      <Route path={'*'} element={<NotFound/>}> </Route>
     </Routes>
      <Footer isLoggedIn={isLoggedIn} onLogOut={handleLogOut}
              isEditProfile={isEditProfile}/>
