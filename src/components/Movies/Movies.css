@@ -1,0 +1,28 @@
+.movies {
+  display: flex;
+  width: 100%;
+  flex-direction: column;
+  justify-content: stretch;
+}
+
+.movies__more-films {
+  display: flex;
+  margin: 0 70px 0;
+}
+
+.movies__more-films-button {
+  width: 320px;
+  margin: 50px auto 80px;
+  background-color: rgba(244, 244, 244, 1);
+  border-radius: 6px;
+  border: none;
+  padding: 11px 0 9px 0;
+  font-size: 12px;
+  line-height: 1.16;
+  font-weight: 500;
+}
+.movies__more-films-button:hover {
+  opacity: .8;
+  cursor: pointer;
+}
+

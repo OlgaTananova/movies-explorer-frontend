@@ -5,9 +5,9 @@ import Input from '../Input/Input';
 function Login() {
 return (
   <div className='login'>
-    <div className='section section_superNarrow section_type_login'>
+    <div className='section section_type_login'>
     <AuthForm name={'login'} heading={'Рады видеть!'} submitButton={'Войти'}>
-      <div>
+      <div className={'auth-form__fieldset'}>
         <Input name={'Email'} type={'email'} placeholder={'Email'} required={true}/>
         <Input name={'Пароль'} type={'password'} placeholder={'Пароль'} required={true}
         error={'Что-то пошло не так.'}/>

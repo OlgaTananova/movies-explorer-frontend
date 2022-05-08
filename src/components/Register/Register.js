@@ -5,9 +5,9 @@ import Input from '../Input/Input';
 function Register() {
   return (
     <div className='register'>
-      <div className='section section_superNarrow section_type_register'>
+      <div className='section section_type_register'>
         <AuthForm name={'register'} heading={'Добро пожаловать!'} submitButton={'Зарегистрироваться'}>
-          <div>
+          <div className={'auth-form__fieldset'}>
             <Input name={'Имя'} type={'text'} placeholder={'Имя'} required={true}
             minLength={2} maxLength={30}/>
             <Input name={'Email'} type={'email'} placeholder={'Email'} required={true}/>

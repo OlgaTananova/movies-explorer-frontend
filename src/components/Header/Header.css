@@ -7,32 +7,35 @@
 .header_promo {
   background-color: rgb(221, 222, 227);
 }
-
 .section_type_header {
   display: flex;
-  justify-content: space-between;
-  margin-top: 18px;
-  margin-bottom: 18px;
-  gap: 18px;
-}
-
-.header__section_type_signup {
-  margin: 70px auto 40px;
-}
-.section {
-  display: flex;
   width: 100%;
+  margin: 18px 70px;
+  gap: 44px;
 }
 
-.section_narrow {
-  margin-left: 70px;
-  margin-right: 70px;
-}
-
-.section_superNarrow {
+.section_type_header-signup {
+  display: flex;
+  justify-content: space-between;
+  margin: 70px auto 40px;
+  gap: 18px;
   width: 396px;
 }
 
 .logo {
   width: 38px;
 }
+
+@media screen and (max-width: 768px) {
+  .section_type_header {
+    margin: 18px 30px;
+  }
+}
+
+@media screen and (max-width: 320px) {
+  .section_type_header {
+    margin: 18px 14px;
+  }
+}
+
+

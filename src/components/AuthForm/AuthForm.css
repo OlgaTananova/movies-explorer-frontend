@@ -8,14 +8,18 @@
   width: 100%;
   margin: 0 auto 40px;
   font-size: 24px;
-  line-height: 1.4;
+  line-height: 1.1;
   font-weight: 500;
 }
 
+.auth-form__fieldset {
+  display: flex;
+  flex-direction: column;
+}
 
 .auth-form__submit-button {
   width: 100%;
-  margin-top: 69px;
+  margin-top: 65px;
   height: 45px;
   background-color: rgba(52, 86, 243, 1);
   border-radius: 3px;
@@ -39,5 +43,6 @@
 }
 
 .auth-form__submit-button_type_login {
-  margin-top: 160px;
+  margin-top: 155px;
 }
+

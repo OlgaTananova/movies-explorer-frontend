@@ -4,10 +4,11 @@
   background-color: rgb(250,250,250);
 }
 
-.profile__section {
+.section_type_profile {
   width: 100%;
   display: flex;
   flex-direction: column;
+  margin: 0 70px;
 }
 
 .profile-form {
@@ -118,6 +119,6 @@
 
 .profile-form__error_type_api {
   text-align: center;
-  margin: 165px auto 20px;
+  margin: 165px auto 5px;
 }
 

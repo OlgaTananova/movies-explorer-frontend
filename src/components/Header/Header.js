@@ -16,7 +16,7 @@ function Header({isLoggedIn, onLogIn}) {
   location.pathname === '/movies' || location.pathname === '/profile') {
     return(
       <header className={`header ${(!isLoggedIn)? 'header_promo': ''}`}>
-        <div className='section section_narrow section_type_header '>
+        <div className='section section_type_header '>
           <Logo />
           <Navigation isLoggedIn={isLoggedIn} onLogIn={onLogIn}/>
         </div>
@@ -25,7 +25,7 @@ function Header({isLoggedIn, onLogIn}) {
   } else if (location.pathname === '/signup' || location.pathname === '/signin') {
     return (
       <header className='header'>
-        <div className='header__section header__section_type_signup section section_superNarrow'>
+        <div className='section section_type_header-signup'>
           <Logo />
         </div>
       </header>

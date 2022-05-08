@@ -7,7 +7,7 @@ function Footer({isLoggedIn, onLogOut, isEditProfile}) {
     location.pathname === '/movies') {
     return (
       <footer className='footer'>
-        <div className='section section_type_footer section_narrow'>
+        <div className='section section_type_footer'>
           <p className='footer__heading footer-text'>Учебный проект Яндекс.Практикум х BeatFilm.</p>
           <div className='footer__links-copyright-element'>
             <span className='footer__copyright footer-text'>&#64; 2022</span>
@@ -23,7 +23,7 @@ function Footer({isLoggedIn, onLogOut, isEditProfile}) {
   } else if (location.pathname ==='/profile') {
     return (
       <footer className='footer'>
-        <div className='footer__section section section_narrow'>
+        <div className='section section_type_footer'>
           {!isEditProfile&& <Link className='footer__logout-link footer-text' to={'/'} onClick={onLogOut}>Выйти из аккаунта</Link>}
         </div>
       </footer>
@@ -31,7 +31,7 @@ function Footer({isLoggedIn, onLogOut, isEditProfile}) {
   } else if (location.pathname === '/signup') {
     return (
       <footer className='footer'>
-        <div className='section section_superNarrow section_type_signup'>
+        <div className='section section_type_footer-signup'>
           <span className='footer__auth-text footer__auth-text_type_question'>Уже зарегистрированы?</span>
           <Link className='footer__auth-text footer__auth-text_type_link' to='/signin'>Войти</Link>
         </div>
@@ -40,7 +40,7 @@ function Footer({isLoggedIn, onLogOut, isEditProfile}) {
   } else if (location.pathname === '/signin') {
     return (
       <footer className='footer'>
-        <div className='section section_superNarrow section_type_signup'>
+        <div className='section section_type_footer-signup'>
           <span className='footer__auth-text footer__auth-text_type_question'>Еще не зарегистрированы?</span>
           <Link className='footer__auth-text footer__auth-text_type_link' to='/signup'>Регистрация</Link>
         </div>

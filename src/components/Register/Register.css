@@ -4,7 +4,9 @@
 }
 
 .section_type_register {
+  display: flex;
   margin: 0 auto;
+  width: 396px;
 }
 
 

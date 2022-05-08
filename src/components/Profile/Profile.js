@@ -17,7 +17,7 @@ function Profile({onEditProfile, isEditProfile, onFormSubmit}) {
   }
   return (
     <div className='profile'>
-      <div className='profile__section section section_narrow'>
+      <div className='section section_type_profile'>
         <form className='profile-form' name='profile-form' onSubmit={onFormSubmit} noValidate={true}>
           <h2 className='profile-form__heading'> Привет, Ольга!
           </h2>

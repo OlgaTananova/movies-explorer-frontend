@@ -1,27 +1,45 @@
 import './Navigation.css';
 import { NavLink, Link } from 'react-router-dom';
+import {useEffect, useState} from 'react';
+import NavigationLinks from '../NavigationLinks/NavigationLinks';
+import NavigationPopup from '../NavigationPopup/NavigationPopup';
 
 function Navigation({isLoggedIn, onLogIn}) {
-  if (isLoggedIn) {
+  const [screenWidth, setScreenWidth] = useState(window.screen.width);
+  const [showBurgerMenu, setShowBurgerMenu] = useState(false);
+
+  function traceScreenWidth() {
+    setScreenWidth(window.screen.width);
+  }
+  useEffect(() => {
+    window.addEventListener('resize', traceScreenWidth)
+    return () => {
+      window.removeEventListener('resize', traceScreenWidth)
+    }
+  })
+
+  function handleOpenBurgerMenuButtonClick() {
+    setShowBurgerMenu(true);
+  }
+
+  function handleCloseBurgerMenuButtonClick() {
+    setShowBurgerMenu(false)
+  }
+
+  if (isLoggedIn && screenWidth >= 769) {
     return (<nav className='navigation'>
-      <div className='navigation__block-movies'>
-        <li className='navigation__link'><NavLink to={'/movies'}
-                                                  className={({ isActive }) => `navigation__link-item
-                                                  ${isActive&& 'navigation__link-item_active'}`}>Фильмы</NavLink>
-        </li>
-        <li className='navigation__link'><NavLink to={'/saved-movies'}
-                                                  className={({ isActive }) => `navigation__link-item
-                                                  ${isActive&& 'navigation__link-item_active'}`}>Сохраненные
-                                                                                                 фильмы</NavLink>
-        </li>
-      </div>
-      <li className='navigation__link'>
-        <NavLink to={'/profile'}
-                 className='navigation__link-item navigation__link-item_type_account'>
-          Аккаунт
-          <div className='navigation__account-logo'> </div>
-        </NavLink></li>
+      <NavigationLinks />
     </nav>)
+  } else if (isLoggedIn && screenWidth <= 768) {
+    return (
+      <nav className='navigation navigation_type_burger'>
+        <button className={'navigation__burger-button'}
+                type={'button'}
+                aria-label={'Кнопка навигации'}
+                onClick={handleOpenBurgerMenuButtonClick}>{}</button>
+        {showBurgerMenu? <NavigationPopup showBurgerMenu={showBurgerMenu} onClose={handleCloseBurgerMenuButtonClick}/> : null}
+      </nav>
+    )
   } else {
     return (<nav className='navigation navigation_notLoggedIn'>
       <Link className='navigation__link-item navigation__link-item_type_authorization'

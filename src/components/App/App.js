@@ -10,13 +10,16 @@ import Register from '../Register/Register';
 import Login from '../Login/Login';
 import SavedMovies from '../SavedMovies/SavedMovies';
 import NotFound from '../NotFound/NotFound';
-import {useEffect, useState} from 'react';
+import {useCallback, useEffect, useState} from 'react';
 import {useNavigate} from 'react-router-dom'
+import SearchForm from '../SearchForm/SearchForm';
 
 
 function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [isEditProfile, setIsEditProfile] = useState(false);
+  const [isShortMovies, setIsShortMovies] = useState(false);
+  const [isLiked, setIsLiked] = useState(false);
   const navigate = useNavigate();
 
   function handleEditProfile() {
@@ -27,6 +30,15 @@ function App() {
     setIsEditProfile(false);
     navigate('/');
   }
+
+  function toggleShortMoviesFilter() {
+    setIsShortMovies(!isShortMovies);
+  }
+
+  function toggleLike() {
+    setIsLiked(!isLiked);
+  }
+
 
   function tokenCheck() {
     const jwt = localStorage.getItem('jwt');
@@ -54,10 +66,14 @@ function App() {
   return (
    <>
      <Header isLoggedIn={isLoggedIn} onLogIn={handleLogIn}/>
+     <SearchForm isLoggedIn={isLoggedIn} isShortMovies={isShortMovies} onToggle={toggleShortMoviesFilter}/>
     <Routes>
       <Route path={'/'} element={<Main isLoggedIn={isLoggedIn}/>}> </Route>
-      <Route path={'/movies'} element={<Movies/>}> </Route>
-      <Route path={'/saved-movies'} element={<SavedMovies/>}> </Route>
+      <Route path={'/movies'} element={<Movies isLoggedIn={isLoggedIn}
+                                               onLike={toggleLike}
+                                               isLiked={isLiked}
+      />}> </Route>
+      <Route path={'/saved-movies'} element={<SavedMovies isLoggedIn={isLoggedIn}/>}> </Route>
       <Route path={'/profile'} element={<Profile
         onEditProfile={handleEditProfile}
       isEditProfile={isEditProfile}
