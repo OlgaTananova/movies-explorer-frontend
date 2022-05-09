@@ -33,7 +33,7 @@
   display: block;
 }
 
-@media screen and (max-width: 768px) {
+@media screen and (max-width: 769px) {
   .short-movies-filter {
     padding-left: 19px;
   }

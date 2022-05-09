@@ -78,7 +78,7 @@
   text-align: center;
 }
 
-@media screen and (max-width: 768px) {
+@media screen and (max-width: 769px) {
   .section_type_about-project {
     margin: 90px 50px 82px;
   }

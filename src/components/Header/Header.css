@@ -26,9 +26,19 @@
   width: 38px;
 }
 
-@media screen and (max-width: 768px) {
+@media screen and (max-width: 769px) {
   .section_type_header {
     margin: 18px 30px;
+  }
+  .section_type_header-signup {
+    margin: 232px auto 40px;
+  }
+}
+
+@media screen and (max-width: 426px) {
+  .section_type_header-signup {
+    width: fit-content;
+    margin: 56px auto 50px;
   }
 }
 

@@ -104,6 +104,11 @@
   }
 }
 
+@media screen and (max-width: 426px) {
+  .section_type_search-form {
+    margin: 75px 30px 45px;
+  }
+}
 
 @media screen and (max-width: 320px) {
   .section_type_search-form {

@@ -64,19 +64,6 @@
   border: none;
 }
 
-@media screen and (max-width: 320px) {
-  .navigation__link-item {
-    font-size: 10px;
-    line-height: 1.23;
-    font-weight: 500;
-  }
-  .navigation__button {
-    width: 54px;
-    height: 26px;
-    margin-left: 14px;
-  }
-}
-
 @media screen and (max-width: 426px) {
   .navigation__link_type_account {
     margin: auto auto 48px;
@@ -95,5 +82,18 @@
   }
   .navigation__link_type_main {
     margin: 140px auto 28px;
+  }
+}
+
+@media screen and (max-width: 320px) {
+  .navigation__link-item {
+    font-size: 10px;
+    line-height: 1.23;
+    font-weight: 500;
+  }
+  .navigation__button {
+    width: 54px;
+    height: 26px;
+    margin-left: 14px;
   }
 }

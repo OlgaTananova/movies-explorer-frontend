@@ -75,7 +75,7 @@
   }
 }
 
-@media screen and (max-width: 768px) {
+@media screen and (max-width: 769px) {
   .section_type_about-me {
     margin: 90px 50px;
   }
@@ -166,5 +166,4 @@
   .about-me__info-bio {
     margin: 0 0 28px 0;
   }
-
 }

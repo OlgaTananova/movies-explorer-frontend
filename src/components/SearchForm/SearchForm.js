@@ -4,20 +4,23 @@ import FilterCheckbox from '../FilterCheckbox/FilterCheckbox';
 
 function SearchForm({isLoggedIn, isShortMovies, onToggle}) {
   const location = useLocation();
-  if ( isLoggedIn && (location.pathname === '/movies'
-    || location.pathname === '/saved-movies'
-  || location.pathname === '/')) {
-    return (
-      <form className={'search-form'} name={'search-form'} noValidate={true}>
+  if (isLoggedIn && (location.pathname === '/movies' || location.pathname === '/saved-movies' || location.pathname === '/')) {
+    return (<form className={'search-form'}
+                  name={'search-form'}
+                  noValidate={true}>
         <div className={'section section_type_search-form'}>
-        <div className={'search-form__main'}>
-          <input className={'search-form__input'} type={'text'} placeholder={'Фильмы'}/>
-          <button className={'search-form__submit-button'} type={'submit'}> </button>
+          <div className={'search-form__main'}>
+            <input className={'search-form__input'}
+                   type={'text'}
+                   placeholder={'Фильмы'}/>
+            <button className={'search-form__submit-button'}
+                    aria-label={'Кнопка поиска фильмов'}
+                    type={'submit'}>{}</button>
+          </div>
+          <FilterCheckbox isShortMovies={isShortMovies}
+                          onToggle={onToggle}/>
         </div>
-        <FilterCheckbox isShortMovies={isShortMovies} onToggle={onToggle}/>
-        </div>
-      </form>
-    )
+      </form>)
   }
   return null
 }

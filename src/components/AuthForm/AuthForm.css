@@ -46,3 +46,24 @@
   margin-top: 155px;
 }
 
+@media screen and (max-width: 769px) {
+  .auth-form__heading {
+    margin: 0 auto 38px;
+  }
+}
+
+@media screen and (max-width: 426px) {
+  .auth-form__heading {
+    text-align: center;
+    margin: 0 auto 75px
+  }
+  .auth-form__submit-button {
+    margin-top: 157px;
+    font-size: 12px;
+    line-height: 1.2;
+  }
+  .auth-form__submit-button_type_login {
+    margin-top: 247px
+  }
+}
+

@@ -5,7 +5,8 @@ function FilterCheckbox({isShortMovies, onToggle}) {
   function FilterButton() {
       return (<button className={`short-movies-filter__button ${isShortMovies&& 'short-movies-filter__button_active'}`}
                       onClick={onToggle}
-                      type={'button'}> </button>)
+                      type={'button'}
+                      aria-label={'Переключатель короткометражных фильмов'}> </button>)
   }
     return (
       <div className={'short-movies-filter'}>
