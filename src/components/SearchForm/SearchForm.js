@@ -12,7 +12,8 @@ function SearchForm({isLoggedIn, isShortMovies, onToggle}) {
           <div className={'search-form__main'}>
             <input className={'search-form__input'}
                    type={'text'}
-                   placeholder={'Фильмы'}/>
+                   placeholder={'Фильмы'}
+                   required={true}/>
             <button className={'search-form__submit-button'}
                     aria-label={'Кнопка поиска фильмов'}
                     type={'submit'}>{}</button>

@@ -14,6 +14,7 @@ import {useCallback, useEffect, useState} from 'react';
 import {useNavigate} from 'react-router-dom'
 import SearchForm from '../SearchForm/SearchForm';
 import Preloader from '../Preloader/Preloader';
+import InfoToolTip from '../InfoToolTip/InfoToolTip';
 
 
 function App() {
