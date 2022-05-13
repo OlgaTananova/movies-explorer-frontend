@@ -15,13 +15,19 @@ import {useNavigate} from 'react-router-dom'
 import SearchForm from '../SearchForm/SearchForm';
 import Preloader from '../Preloader/Preloader';
 import InfoToolTip from '../InfoToolTip/InfoToolTip';
-
+import {getMovies} from '../../utils/MoviesApi';
+import * as mainApi from '../../utils/MainApi';
+import {CurrentUserContext} from '../../contexts/CurrentUserContext';
 
 function App() {
+  const [currentUser, setCurrentUser] = useState({});
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [isEditProfile, setIsEditProfile] = useState(false);
   const [isShortMovies, setIsShortMovies] = useState(false);
   const [isLiked, setIsLiked] = useState(false);
+  const [errorMessage, setErrorMessage] = useState('');
+  const [isInfoToolTipOpen, setInfoToolTipOpen] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
   const navigate = useNavigate();
 
   function handleEditProfile() {
@@ -43,51 +49,118 @@ function App() {
 
 
   function tokenCheck() {
-    const jwt = localStorage.getItem('jwt');
-    if (!jwt) {
-      return
-    }
-    setIsLoggedIn(true);
+    mainApi.verifyUser()
+      .then((data) => {
+        setIsLoggedIn(true);
+      })
+      .catch((err)=> {
+        setErrorMessage(err.message)
+      })
   }
 
   useEffect(()=> {
       tokenCheck();
   }, []);
 
+  useEffect(() => {
+    isLoggedIn ? navigate('/movies') : navigate('/');
+  }, [isLoggedIn])
+
+
 
   function handleLogOut() {
-    localStorage.removeItem('jwt');
-    setIsLoggedIn(false);
+    setIsLoading(true);
+    mainApi.logOut()
+      .then(()=> {
+        setIsLoading(false);
+        setIsLoggedIn(false);
+      })
+      .catch((err) => {
+        setErrorMessage(err.message);
+        setIsLoading(false);
+      })
+
   }
 
-  function handleLogIn() {
-    localStorage.setItem('jwt', '123');
-    setIsLoggedIn(true);
+
+  function closePopups() {
+    setInfoToolTipOpen(false);
+  }
+
+  function handleSearchMovies(searchInput, isFormValid) {
+    if (!isFormValid) {
+      setErrorMessage('Нужно ввести ключевое слово');
+      setInfoToolTipOpen(true);
+    }
+    setIsLoading(true);
+    navigate('/movies');
+    getMovies()
+      .then((movies)=> {
+        setIsLoading(false);
+      })
+      .catch((err)=>{
+        setErrorMessage(err.message);
+        setIsLoading(false);
+        setInfoToolTipOpen(true);
+      })
+  }
+
+  function handleLogin ({email, password}) {
+    setIsLoading(true);
+    mainApi.signIn(email, password)
+      .then((res) => {
+        setIsLoading(false);
+        setIsLoggedIn(true);
+      })
+      .catch(err => {
+        setIsLoading(false);
+        setErrorMessage(err.message);
+        setInfoToolTipOpen(true);
+      })
+  }
+
+  function handleRegister({name, email, password}) {
+    setIsLoading(true);
+    mainApi.signUp(name, email, password)
+      .then((data) => {
+        console.log(data)
+      })
+      .catch((err) => {
+        console.log(err);
+      })
+
   }
 
   return (
-   <>
-     <Header isLoggedIn={isLoggedIn} onLogIn={handleLogIn}/>
-     <SearchForm isLoggedIn={isLoggedIn} isShortMovies={isShortMovies} onToggle={toggleShortMoviesFilter}/>
-    <Routes>
-      <Route path={'/'} element={<Main isLoggedIn={isLoggedIn}/>}> </Route>
-      <Route path={'/movies'} element={<Movies isLoggedIn={isLoggedIn}
-                                               onLike={toggleLike}
-                                               isLiked={isLiked}
-      />}> </Route>
-      <Route path={'/saved-movies'} element={<SavedMovies isLoggedIn={isLoggedIn}/>}> </Route>
-      <Route path={'/profile'} element={<Profile
-        onEditProfile={handleEditProfile}
-      isEditProfile={isEditProfile}
-      onFormSubmit={handleFormSubmit}/>}>
-      </Route>
-      <Route path={'/signup'} element={<Register/>}> </Route>
-      <Route path={'/signin'} element={<Login/>}> </Route>
-      <Route path={'/404'} element={<NotFound/>}> </Route>
-      <Route path={'*'} element={<NotFound/>}> </Route>
-    </Routes>
+   <><CurrentUserContext.Provider value={currentUser}>
+     <Header isLoggedIn={isLoggedIn}/>
+     <SearchForm isLoggedIn={isLoggedIn}
+                 isShortMovies={isShortMovies}
+                 onSearchMovies={handleSearchMovies}
+                 onToggle={toggleShortMoviesFilter}/>
+     <Routes>
+       <Route path={'/'} element={<Main isLoggedIn={isLoggedIn}/>}> </Route>
+       <Route path={'/movies'} element={<Movies isLoggedIn={isLoggedIn}
+                                                onLike={toggleLike}
+                                                isLiked={isLiked}
+                                                isLoading={isLoading}
+       />}> </Route>
+       <Route path={'/saved-movies'} element={<SavedMovies isLoggedIn={isLoggedIn}/>}> </Route>
+       <Route path={'/profile'} element={<Profile
+         onEditProfile={handleEditProfile}
+         isEditProfile={isEditProfile}
+         onFormSubmit={handleFormSubmit}/>}>
+       </Route>
+       <Route path={'/signup'} element={<Register onRegister={handleRegister}/>}> </Route>
+       <Route path={'/signin'} element={<Login onLogin={handleLogin}/>}> </Route>
+       <Route path={'/404'} element={<NotFound/>}> </Route>
+       <Route path={'*'} element={<NotFound/>}> </Route>
+     </Routes>
      <Footer isLoggedIn={isLoggedIn} onLogOut={handleLogOut}
              isEditProfile={isEditProfile}/>
+     <InfoToolTip errorMessage={errorMessage} isOpen={isInfoToolTipOpen} onClose={closePopups}/>
+     {isLoading&& <Preloader />}
+   </CurrentUserContext.Provider>
    </>
   );
 }

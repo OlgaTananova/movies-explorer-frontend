@@ -5,6 +5,10 @@
   align-items: center;
 }
 
+.navigation_closed {
+  display: none;
+}
+
 .navigation__link {
   display: block;
 }

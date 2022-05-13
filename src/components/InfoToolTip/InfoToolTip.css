@@ -5,7 +5,13 @@
   width: 100vw;
   height: 100vh;
   background-color: rgba(0, 0, 0, .3);
+  display: none;
+  pointer-events: none;
+}
+
+.infotooltip_opened {
   display: flex;
+  pointer-events: all;
 }
 
 .infotooltip__container {
@@ -18,8 +24,9 @@
   position: relative;
   display: flex;
   flex-direction: column;
-  justify-content: space-around;
+  justify-content: center;
   align-items: center;
+  gap: 15px;
 }
 
 .infotooltip__close-button {
@@ -47,6 +54,8 @@
 .infotooltip__message {
   font-size: 14px;
   line-height: 1.2;
+  width: 80%;
+  text-align: center;
 }
 
 .infotooltip__icon {
