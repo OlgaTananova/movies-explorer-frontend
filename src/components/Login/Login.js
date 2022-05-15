@@ -21,7 +21,8 @@ function Login({onLogin}) {
 return (
   <div className='login'>
     <div className='section section_type_login'>
-    <AuthForm name={'login'} heading={'Рады видеть!'} submitButton={'Войти'} onSubmit={handleSubmit}>
+    <AuthForm name={'login'} heading={'Рады видеть!'} submitButton={'Войти'}
+              isValid={validator.isValid} onSubmit={handleSubmit}>
       <div className={'auth-form__fieldset'}>
         <Input name={'email'}
                error={validator.errors.email}

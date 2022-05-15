@@ -68,6 +68,10 @@
   background-position: center;
 }
 
+.infotooltip__icon_type_success {
+  background-image: url('../../images/infotooltip_icon_success.svg');
+}
+
 @media screen and (max-width: 769px) {
   .infotooltip__container {
     width: 300px;

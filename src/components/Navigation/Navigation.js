@@ -4,7 +4,7 @@ import {useEffect, useState} from 'react';
 import NavigationLinks from '../NavigationLinks/NavigationLinks';
 import NavigationPopup from '../NavigationPopup/NavigationPopup';
 
-function Navigation({isLoggedIn, onLogIn}) {
+function Navigation({isLoggedIn}) {
   const [screenWidth, setScreenWidth] = useState(window.screen.width);
   const [windowOuterWidth, setWindowOuterWidth] = useState(window.outerWidth);
   const [showBurgerMenu, setShowBurgerMenu] = useState(false);
@@ -23,14 +23,14 @@ function Navigation({isLoggedIn, onLogIn}) {
     return () => {
       window.removeEventListener('resize', traceScreenWidth)
     }
-  })
+  },[])
 
   useEffect(() => {
     window.addEventListener('resize', traceWindowOuterWidth)
     return () => {
       window.removeEventListener('resize', traceWindowOuterWidth)
     }
-  })
+  },[])
 
   function handleOpenBurgerMenuButtonClick() {
     setShowBurgerMenu(true);
@@ -60,8 +60,7 @@ function Navigation({isLoggedIn, onLogIn}) {
       <Link className='navigation__link-item
           navigation__link-item_type_authorization'
             to={'/signin'}>
-        <button className='navigation__button'
-                onClick={onLogIn}>Войти
+        <button className='navigation__button'>Войти
         </button>
       </Link>
     </nav>)

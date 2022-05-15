@@ -12,7 +12,7 @@ function checkResponse(response){
   }
 }
 
-export function getMovies() {
+export default function getMovies() {
     return fetch(baseURL, {
       method: 'GET',
       headers: {
@@ -20,7 +20,7 @@ export function getMovies() {
       }
     })
       .then(res => {
-        checkResponse(res);
+        return checkResponse(res);
       })
   }
 

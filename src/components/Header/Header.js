@@ -18,7 +18,7 @@ function Header({isLoggedIn, onLogIn}) {
       <header className={`header ${(!isLoggedIn)? 'header_promo': ''}`}>
         <div className='section section_type_header '>
           <Logo />
-          <Navigation isLoggedIn={isLoggedIn} onLogIn={onLogIn}/>
+          <Navigation isLoggedIn={isLoggedIn}/>
         </div>
       </header>
     )

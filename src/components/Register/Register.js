@@ -19,12 +19,11 @@ function Register({onRegister}) {
     onRegister(validator.values)
   }
 
-
   return (<div className='register'>
       <div className='section section_type_register'>
         <AuthForm name={'register'}
                   heading={'Добро пожаловать!'}
-                  submitButton={'Зарегистрироваться'} onSubmit={handleSubmit}>
+                  submitButton={'Зарегистрироваться'} isValid={validator.isValid} onSubmit={handleSubmit}>
           <div className={'auth-form__fieldset'}>
             <Input name={'name'}
                    type={'text'}
@@ -32,6 +31,7 @@ function Register({onRegister}) {
                    required={true}
                    minLength={2}
                    maxLength={30}
+                   // pattern={/^[A-Za-zА-Яа-я\s ]*$/}
                   value={validator.values.name}
                   onChange={validator.handleChange}
                   error={validator.errors.name}/>

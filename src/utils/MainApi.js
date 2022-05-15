@@ -69,3 +69,33 @@ export const logOut = () => {
       return checkResponse(res);
     })
 }
+
+export const getCurrentUser = () => {
+  return fetch(`${baseUrl}/users/me`, {
+    method: 'GET',
+    headers: {
+      "Content-Type": "application/json"
+    },
+    credentials: 'include'
+  })
+    .then((res) => {
+      return checkResponse(res);
+    })
+}
+
+export const editUserProfile = (name, email) => {
+  return fetch(`${baseUrl}/users/me`, {
+    method: 'PATCH',
+    headers: {
+      "Content-Type": "application/json"
+    },
+    credentials: 'include',
+    body: JSON.stringify({
+      "name": name,
+      "email": email
+    })
+  })
+    .then((res) => {
+      return checkResponse(res);
+    })
+}

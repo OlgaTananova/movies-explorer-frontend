@@ -1,13 +1,13 @@
 import './MoviesCard.css';
 import {useLocation} from 'react-router-dom';
 
-function MoviesCard({imageLink, heading, duration, isLiked, onLike}) {
+function MoviesCard({imageLink, heading, duration, trailerLink, isLiked, onLike}) {
   const location = useLocation();
   return (<div className={'movies-card'}>
       <a className={'movies-card__trailer-link'}
          target={'_blank'}
          rel='noreferrer'
-         href={'https://youtube.com'}><img className={'movies-card__image'}
+         href={trailerLink}><img className={'movies-card__image'}
                                            alt={`Обложка фильма: ${heading}`}
                                            src={imageLink}/></a>
       <div className={'movies-card__description'}>
