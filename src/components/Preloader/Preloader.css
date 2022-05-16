@@ -52,6 +52,12 @@
     left: 0;
 }
 
+.preloader_type_movies {
+    position: unset;
+    top: unset;
+    left: unset;
+}
+
 .preloader__container {
     width: 100px;
     height: 100px;

@@ -29,7 +29,7 @@ function NavigationPopup({showBurgerMenu, onClose}) {
                 className={'navigation-popup__close-button'} onClick={onClose}>{}</button>
         <li className={`navigation__link ${showBurgerMenu? 'navigation__link_type_main' : ''}`}>
           <Link className={`navigation__link-item
-          ${showBurgerMenu? 'navigation__link-item_type_burger' : ''}`} to={'/'}
+          ${showBurgerMenu? 'navigation__link-item_type_burger' : ''}`} to={'/movies'}
           onClick={onClose}>Главная</Link></li>
         <NavigationLinks showBurgerMenuStyle={showBurgerMenu} onClose={onClose}/>
       </ul>

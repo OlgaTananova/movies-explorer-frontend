@@ -5,7 +5,7 @@ import FilterCheckbox from '../FilterCheckbox/FilterCheckbox';
 import {useMemo} from 'react';
 import {useEffect} from 'react';
 
-function SearchForm({isLoggedIn, isShortMovies, onToggle, onSearchMovies}) {
+function SearchForm({ isShortMovies, onToggle, onSearchMovies, searchCount}) {
   const location = useLocation();
   const initialValues = useMemo(()=> {
     return {searchInput: ''}
@@ -13,12 +13,16 @@ function SearchForm({isLoggedIn, isShortMovies, onToggle, onSearchMovies}) {
   const validator = useForm(initialValues);
   const isFormValid = validator.isValid;
 
+  useEffect(() => {
+    validator.setValues((prev) => ({...prev, searchInput: localStorage.getItem('searchInput')}) || '');
+  }, [searchCount])
+
   function handleFormSubmit(e) {
     e.preventDefault();
     onSearchMovies(validator.values.searchInput, isFormValid, isShortMovies);
   }
 
-  if (isLoggedIn && (location.pathname === '/movies' || location.pathname === '/saved-movies' || location.pathname === '/')) {
+  if ((location.pathname === '/movies' || location.pathname === '/saved-movies' || location.pathname === '/')) {
     return (<form className={'search-form'}
                   name={'search-form'}
                   noValidate={true} onSubmit={handleFormSubmit}>
@@ -30,7 +34,7 @@ function SearchForm({isLoggedIn, isShortMovies, onToggle, onSearchMovies}) {
                    required={true}
                    name={'searchInput'}
                    value={validator.values.searchInput}
-                    onChange={validator.handleChange}/>
+                   onChange={validator.handleChange}/>
             <button className={'search-form__submit-button'}
                     aria-label={'Кнопка поиска фильмов'}
                     type={'submit'}>{}</button>
