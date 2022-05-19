@@ -1,20 +1,19 @@
 import './MoviesCardList.css';
 import MoviesCard from '../MoviesCard/MoviesCard';
+import {useLocation} from 'react-router-dom';
 
-function MoviesCardList({onLike, isLiked, searchedMovies}) {
+function MoviesCardList({onLike, showedMovies, savedMovies, onDislike}) {
+  const location = useLocation();
 
-
-    if (searchedMovies) {
+    if (showedMovies) {
       return (
         <ul className={'movies-card-list'}>
-          {searchedMovies.map((movie) => {
-            return <MoviesCard key={movie.id}
-                               imageLink={`https://api.nomoreparties.co/${movie.image.url}`}
-                               heading={movie.nameRU}
-                               duration={movie.duration}
-                               trailerLink={movie.trailerLink}
+          {showedMovies.map((movie) => {
+            return <MoviesCard key={location.pathname === '/movies' ? movie.id : movie.movieId}
+                               {...movie}
                                onLike={onLike}
-                               isLiked={isLiked}/>
+                               onDislike={onDislike}
+                               savedMovies={savedMovies}/>
           })}
         </ul>
       )

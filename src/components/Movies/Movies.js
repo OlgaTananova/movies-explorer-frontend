@@ -5,28 +5,91 @@ import SearchForm from '../SearchForm/SearchForm';
 import SearchNotification from '../SearchNotification/SearchNotification';
 import {useEffect, useState} from 'react';
 
-function Movies({
-                  onLike,
-                  isLiked,
+function Movies({ onLike,
+                  savedMovies,
                   isLoading,
                   onSearchMovies,
                   searchCount,
                   errorMessage}) {
-  const [searchedMovies, setSearchedMovies] = useState(JSON.parse(localStorage.getItem('searchedMovies')));
-  const [isShortMovies, setIsShortMovies] =
-    useState(localStorage.getItem('isShortMovies') !== null?
-      JSON.parse(localStorage.getItem('isShortMovies'))
-    : false);
-  const searchedMoviesCount = searchedMovies&& searchedMovies.length;
+  const searchedMoviesInLS = JSON.parse(localStorage.getItem('searchedMovies'));
+  const isShortMoviesInLS = JSON.parse(localStorage.getItem('isShortMovies'));
+  const [searchedMovies, setSearchedMovies] = useState(searchedMoviesInLS? searchedMoviesInLS : []);
+  const [isShortMovies, setIsShortMovies] = useState(isShortMoviesInLS? isShortMoviesInLS : false);
+  const [screenWidth, setScreenWidth] = useState(window.screen.width);
+  const [windowOuterWidth, setWindowOuterWidth] = useState(window.outerWidth);
+  const searchedMoviesCount = searchedMovies.length;
+  const bigScreenLayout = (screenWidth > 768 || windowOuterWidth > 768) && searchedMoviesCount >= 12;
+  const middleScreenLayout = ((screenWidth > 480 && screenWidth <= 768) || (windowOuterWidth > 480 && windowOuterWidth <= 768)) && searchedMoviesCount >= 8;
+  const smallScreenLayout = (screenWidth <= 480 || windowOuterWidth <= 480) && searchedMoviesCount >= 5;
+  const [showedMovies, setShowedMovies] = useState(()=> {
+    if (bigScreenLayout) {
+        return searchedMovies.slice(0,12);
+    } else if (middleScreenLayout) {
+        return searchedMovies.slice(0, 8);
+    } else if (smallScreenLayout){
+        return searchedMovies.slice(0,5);
+      } else {
+        return searchedMovies
+      }
+  });
+
 
   function toggleShortMoviesFilter() {
     setIsShortMovies(!isShortMovies);
   }
 
-  useEffect(() => {
-    setSearchedMovies(JSON.parse(localStorage.getItem('searchedMovies')));
-    setIsShortMovies(JSON.parse(localStorage.getItem('isShortMovies')));
+  function traceScreenWidth() {
+    setScreenWidth(window.screen.width);
+  }
+
+  function traceWindowOuterWidth() {
+    setWindowOuterWidth(window.outerWidth);
+  }
+
+  function handleShowMoreMoviesClick() {
+    if (screenWidth > 768 || windowOuterWidth > 768) {
+      setShowedMovies(searchedMovies.slice(0, showedMovies.length+3))
+    } else if ((screenWidth > 480 && screenWidth <= 768) || (windowOuterWidth > 480 && windowOuterWidth <= 768)) {
+      setShowedMovies(searchedMovies.slice(0, showedMovies.length+2))
+    } else {
+      setShowedMovies(searchedMovies.slice(0, showedMovies.length+1))
+    }
+  }
+
+   useEffect(() => {
+     const searchedMoviesInLS = localStorage.getItem('searchedMovies');
+     const isShortMoviesInLS = localStorage.getItem('isShortMovies')
+     if (searchedMoviesInLS !== null  && isShortMoviesInLS !== null) {
+       setSearchedMovies(JSON.parse(searchedMoviesInLS));
+       setIsShortMovies(JSON.parse(isShortMoviesInLS));
+     }
   },[searchCount])
+
+  useEffect(() => {
+    window.addEventListener('resize', traceScreenWidth);
+    return () => {
+      window.removeEventListener('resize', traceScreenWidth)
+    }
+  },[])
+
+  useEffect(() => {
+    window.addEventListener('resize', traceWindowOuterWidth)
+    return () => {
+      window.removeEventListener('resize', traceWindowOuterWidth)
+    }
+  },[])
+
+  useEffect(() => {
+      if (bigScreenLayout) {
+        setShowedMovies(searchedMovies.slice(0, 12))
+      } else if (middleScreenLayout) {
+        setShowedMovies(searchedMovies.slice(0, 8));
+      } else if (smallScreenLayout) {
+        setShowedMovies(searchedMovies.slice(0, 5));
+      } else {
+        setShowedMovies(searchedMovies);
+      }
+  },[screenWidth, windowOuterWidth, searchedMovies])
 
 
     if (isLoading) {
@@ -60,13 +123,15 @@ function Movies({
                     searchCount={searchCount}
                     onToggle={toggleShortMoviesFilter}/>
         <div className={'movies'}>
-          {(searchedMovies && searchedMoviesCount === 0)?
+          {(showedMovies.length === 0 && searchCount !==0)?
             <SearchNotification content={'Ничего не найдено'}/> :
               <MoviesCardList onLike={onLike}
-                              isLiked={isLiked}
-                              searchedMovies={searchedMovies}/>}
-              {(searchedMoviesCount && searchedMoviesCount !== 0)? <div className={'movies__more-films'}>
+                              showedMovies={showedMovies}
+                              savedMovies={savedMovies}
+              />}
+              {(searchedMoviesCount !== 0 && searchedMoviesCount > showedMovies.length)? <div className={'movies__more-films'}>
                 <button type={'button'}
+                        onClick={handleShowMoreMoviesClick}
                         className={'movies__more-films-button'}>Еще
                 </button>
               </div>

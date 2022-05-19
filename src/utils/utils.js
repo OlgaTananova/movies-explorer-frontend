@@ -21,3 +21,8 @@ export function saveToLocalStorage(searchedMovies, isShortMovies, searchInput) {
   localStorage.setItem('isShortMovies', JSON.stringify(isShortMovies));
   localStorage.setItem('searchedMovies', JSON.stringify(searchedMovies));
 }
+
+export const movieImageBaseUrl = 'https://api.nomoreparties.co';
+export const moviesBaseUrl = 'https://api.nomoreparties.co/beatfilm-movies';
+export const baseUrl = 'https://api.movie-explorerbyolga.nomoredomains.work';
+export const MINUTESINHOUR = 60;

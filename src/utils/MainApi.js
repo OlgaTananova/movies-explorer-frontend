@@ -1,4 +1,4 @@
-// const baseUrl = 'https://api.movie-explorerbyolga.nomoredomains.work';
+// import {baseUrl} from './utils';
 const baseUrl = 'http://localhost:3000'
 const headers = {
   "Content-Type": "application/json",
@@ -94,6 +94,58 @@ export const editUserProfile = (name, email) => {
       "name": name,
       "email": email
     })
+  })
+    .then((res) => {
+      return checkResponse(res);
+    })
+}
+
+export const saveMovie = (movie) => {
+  return fetch(`${baseUrl}/movies`, {
+    method: 'POST',
+    headers: {
+      "Content-Type": "application/json"
+    },
+    credentials: 'include',
+    body: JSON.stringify({
+      "country": movie.country,
+      "director": movie.director,
+      "duration": movie.duration,
+      "year": movie.year,
+      "description": movie.description,
+      "image": movie.image,
+      "trailerLink": movie.trailerLink,
+      "nameRU": movie.nameRU,
+      "nameEN": movie.nameEN,
+      "thumbnail": movie.thumbnail,
+      "movieId": movie.id
+    })
+  })
+    .then((res) => {
+      return checkResponse(res);
+    })
+}
+
+export const deleteMovie = (id) => {
+  return fetch(`${baseUrl}/movies/${id}`, {
+    method: 'DELETE',
+    headers: {
+      "Content-Type": "application/json"
+    },
+    credentials: 'include',
+  })
+    .then((res) => {
+      return checkResponse(res);
+    })
+}
+
+export const getSavedMovies = () => {
+  return fetch(`${baseUrl}/movies`, {
+    method: "GET",
+    headers: {
+      "Content-Type": "application/json"
+    },
+    credentials: 'include'
   })
     .then((res) => {
       return checkResponse(res);

@@ -1,6 +1,5 @@
 // Класс запросов к api Beatfilm-movies
-
-const baseURL = 'https://api.nomoreparties.co/beatfilm-movies';
+import {moviesBaseUrl} from './utils';
 
 function checkResponse(response){
   if (response.ok) {
@@ -13,7 +12,7 @@ function checkResponse(response){
 }
 
 export default function getMovies() {
-    return fetch(baseURL, {
+    return fetch(moviesBaseUrl, {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json'
