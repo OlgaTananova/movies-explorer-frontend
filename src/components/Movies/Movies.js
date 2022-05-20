@@ -4,6 +4,7 @@ import Preloader from '../Preloader/Preloader';
 import SearchForm from '../SearchForm/SearchForm';
 import SearchNotification from '../SearchNotification/SearchNotification';
 import {useEffect, useState} from 'react';
+import {showShortMovies} from '../../utils/utils';
 
 function Movies({ onLike,
                   savedMovies,
@@ -33,9 +34,14 @@ function Movies({ onLike,
       }
   });
 
-
   function toggleShortMoviesFilter() {
     setIsShortMovies(!isShortMovies);
+    if (!isShortMovies && searchedMovies) {
+      const showedShortMovies = showShortMovies(searchedMovies);
+      setSearchedMovies(showedShortMovies);
+    } else if (isShortMovies && searchedMovies) {
+      setSearchedMovies(JSON.parse(localStorage.getItem('searchedMovies')));
+    }
   }
 
   function traceScreenWidth() {
@@ -49,10 +55,12 @@ function Movies({ onLike,
   function handleShowMoreMoviesClick() {
     if (screenWidth > 768 || windowOuterWidth > 768) {
       setShowedMovies(searchedMovies.slice(0, showedMovies.length+3))
-    } else if ((screenWidth > 480 && screenWidth <= 768) || (windowOuterWidth > 480 && windowOuterWidth <= 768)) {
+    }
+    // else if ((screenWidth > 480 && screenWidth <= 768) || (windowOuterWidth > 480 && windowOuterWidth <= 768)) {
+    //   setShowedMovies(searchedMovies.slice(0, showedMovies.length+2))
+    // }
+    else {
       setShowedMovies(searchedMovies.slice(0, showedMovies.length+2))
-    } else {
-      setShowedMovies(searchedMovies.slice(0, showedMovies.length+1))
     }
   }
 
@@ -89,7 +97,7 @@ function Movies({ onLike,
       } else {
         setShowedMovies(searchedMovies);
       }
-  },[screenWidth, windowOuterWidth, searchedMovies])
+  },[screenWidth, windowOuterWidth, searchedMovies, isShortMovies])
 
 
     if (isLoading) {
@@ -129,7 +137,7 @@ function Movies({ onLike,
                               showedMovies={showedMovies}
                               savedMovies={savedMovies}
               />}
-              {(searchedMoviesCount !== 0 && searchedMoviesCount > showedMovies.length)? <div className={'movies__more-films'}>
+              {(searchedMoviesCount !== showedMovies.length)? <div className={'movies__more-films'}>
                 <button type={'button'}
                         onClick={handleShowMoreMoviesClick}
                         className={'movies__more-films-button'}>Еще

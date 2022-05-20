@@ -60,7 +60,7 @@ function Profile({onEditProfileClick, isEditProfile, onEditProfile}) {
                      required={true}
                      value={validator.values.name}
                      onChange={validator.handleChange}
-                     // pattern ={}
+                     pattern ={'[A-Za-zА-яа-я\-\ ]{2,30}'}
                      disabled={!isEditProfile}/>
             </label>
             <span className='profile-form__error profile-form__error_underlined'>{validator.errors.name}</span>

@@ -1,10 +1,10 @@
-// import {baseUrl} from './utils';
-const baseUrl = 'http://localhost:3000'
+import {baseUrl} from './utils';
+
 const headers = {
   "Content-Type": "application/json",
 }
 
-const checkResponse = ((response)=>{
+const checkResponse = ((response) => {
   if (response.ok) {
     return response.json();
   }
@@ -14,43 +14,33 @@ const checkResponse = ((response)=>{
   })
 })
 
-export const signUp = ((name, email, password)=>{
+export const signUp = ((name, email, password) => {
   return fetch(`${baseUrl}/signup`, {
-    method: 'POST',
-    headers: headers,
-    body: JSON.stringify({
-      "name": name,
-      "password" : password,
-      "email": email
+    method: 'POST', headers: headers, body: JSON.stringify({
+      "name": name, "password": password, "email": email
     })
   })
-    .then((res)=> {
+    .then((res) => {
       return checkResponse(res)
     })
 })
 
-export const signIn = ((email, password)=> {
+export const signIn = ((email, password) => {
   return fetch(`${baseUrl}/signin`, {
-    method: 'POST',
-    headers: headers,
-    body: JSON.stringify({
-      "password": password,
-      "email": email
-    }),
-    credentials: 'include'
+    method: 'POST', headers: headers, body: JSON.stringify({
+      "password": password, "email": email
+    }), credentials: 'include'
   })
     .then((res) => {
-    return checkResponse(res);
+      return checkResponse(res);
     })
 })
 
 export const verifyUser = () => {
   return fetch(`${baseUrl}/users/me`, {
-    method: "GET",
-    headers: {
+    method: "GET", headers: {
       "Content-Type": "application/json"
-    },
-    credentials: 'include'
+    }, credentials: 'include'
   })
     .then((res) => {
       return checkResponse(res);
@@ -59,11 +49,9 @@ export const verifyUser = () => {
 
 export const logOut = () => {
   return fetch(`${baseUrl}/signout`, {
-    method: "POST",
-    headers: {
+    method: "POST", headers: {
       "Content-Type": "application/json"
-    },
-    credentials: 'include'
+    }, credentials: 'include'
   })
     .then((res) => {
       return checkResponse(res);
@@ -72,11 +60,9 @@ export const logOut = () => {
 
 export const getCurrentUser = () => {
   return fetch(`${baseUrl}/users/me`, {
-    method: 'GET',
-    headers: {
+    method: 'GET', headers: {
       "Content-Type": "application/json"
-    },
-    credentials: 'include'
+    }, credentials: 'include'
   })
     .then((res) => {
       return checkResponse(res);
@@ -85,14 +71,10 @@ export const getCurrentUser = () => {
 
 export const editUserProfile = (name, email) => {
   return fetch(`${baseUrl}/users/me`, {
-    method: 'PATCH',
-    headers: {
+    method: 'PATCH', headers: {
       "Content-Type": "application/json"
-    },
-    credentials: 'include',
-    body: JSON.stringify({
-      "name": name,
-      "email": email
+    }, credentials: 'include', body: JSON.stringify({
+      "name": name, "email": email
     })
   })
     .then((res) => {
@@ -102,12 +84,9 @@ export const editUserProfile = (name, email) => {
 
 export const saveMovie = (movie) => {
   return fetch(`${baseUrl}/movies`, {
-    method: 'POST',
-    headers: {
+    method: 'POST', headers: {
       "Content-Type": "application/json"
-    },
-    credentials: 'include',
-    body: JSON.stringify({
+    }, credentials: 'include', body: JSON.stringify({
       "country": movie.country,
       "director": movie.director,
       "duration": movie.duration,
@@ -128,11 +107,9 @@ export const saveMovie = (movie) => {
 
 export const deleteMovie = (id) => {
   return fetch(`${baseUrl}/movies/${id}`, {
-    method: 'DELETE',
-    headers: {
+    method: 'DELETE', headers: {
       "Content-Type": "application/json"
-    },
-    credentials: 'include',
+    }, credentials: 'include',
   })
     .then((res) => {
       return checkResponse(res);
@@ -141,11 +118,9 @@ export const deleteMovie = (id) => {
 
 export const getSavedMovies = () => {
   return fetch(`${baseUrl}/movies`, {
-    method: "GET",
-    headers: {
+    method: "GET", headers: {
       "Content-Type": "application/json"
-    },
-    credentials: 'include'
+    }, credentials: 'include'
   })
     .then((res) => {
       return checkResponse(res);

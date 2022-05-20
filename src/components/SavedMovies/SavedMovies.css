@@ -6,6 +6,20 @@
   justify-content: stretch;
 }
 
+.saved-movies__return-button {
+  border: none;
+  background-color: rgba(250, 250, 250, 1);
+  margin-top: 20px;
+  font-size: 13px;
+  line-height: 1.4;
+  transition: opacity .3s ease;
+}
+
+.saved-movies__return-button:hover {
+  cursor: pointer;
+  opacity: .7;
+}
+
 @media screen and (max-width: 769px) {
   .saved-movies {
     padding-bottom: 155px;

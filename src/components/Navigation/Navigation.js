@@ -23,14 +23,14 @@ function Navigation({isLoggedIn}) {
     return () => {
       window.removeEventListener('resize', traceScreenWidth)
     }
-  },[])
+  }, [])
 
   useEffect(() => {
     window.addEventListener('resize', traceWindowOuterWidth)
     return () => {
       window.removeEventListener('resize', traceWindowOuterWidth)
     }
-  },[])
+  }, [])
 
   function handleOpenBurgerMenuButtonClick() {
     setShowBurgerMenu(true);

@@ -25,7 +25,7 @@ function SearchForm({ isShortMovies, onToggle, onSearchMovies, searchCount, onSe
 
   function handleSavedMoviesFormSubmit(e) {
     e.preventDefault()
-    onSearchSavedMovies(validatorForSavedMovies.values.searchInput, isShortMovies)
+    onSearchSavedMovies(validatorForSavedMovies.values.searchInput, isShortMovies, validatorForSavedMovies.resetForm);
   }
 
   if ((location.pathname === '/movies' || location.pathname === '/')) {
@@ -69,7 +69,8 @@ function SearchForm({ isShortMovies, onToggle, onSearchMovies, searchCount, onSe
                   type={'submit'}>{}</button>
         </div>
         <FilterCheckbox isShortMovies={isShortMovies}
-                        onToggle={onToggle}/>
+                        onToggle={onToggle}
+                        disabled={disabled}/>
       </div>
     </form>)
   }
