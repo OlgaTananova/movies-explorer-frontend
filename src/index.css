@@ -1,0 +1,5 @@
+/* Общий файл стилей */
+
+@import url('./vendor/normalize.css');
+@import url('./vendor/fonts/inter/fonts.css');
+@import url('./components/App/App.css');

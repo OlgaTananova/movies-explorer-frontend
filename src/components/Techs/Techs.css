@@ -1,0 +1,113 @@
+.techs {
+  display: flex;
+  width: 100%;
+  background-color: rgba(245, 245, 245, 1);
+}
+
+.section__heading_type_techs {
+  align-self: flex-start;
+  padding-bottom: 19px;
+}
+
+.section_type_techs {
+  display: flex;
+  width: 100%;
+  flex-direction: column;
+  margin: 100px 70px;
+}
+
+.techs__subheading {
+  font-size: 50px;
+  line-height: 1.16;
+  font-weight: 400;
+  margin: 90px auto 0;
+  letter-spacing: -0.04em;
+}
+
+.techs__description {
+  font-size: 14px;
+  line-height: 1.4;
+  letter-spacing: -0.04em;
+  margin: 26px auto 100px;
+  text-align: center;
+}
+
+.techs__list {
+  margin: 0 auto;
+  padding: 0;
+  display: grid;
+  grid-template-columns: repeat(7, 90px);
+  column-gap: 10px;
+}
+
+.tech__list-item {
+  background-color: rgba(232, 232, 232, 1);
+  border-radius: 10px;
+  display: flex;
+  font-size: 14px;
+  line-height: 1.2;
+  padding: 21px 0;
+  justify-content: space-around;
+  letter-spacing: -0.04em;
+}
+
+@media screen and (max-width: 820px) {
+  .techs__list {
+    width: 100%;
+    grid-template-columns: repeat(7, 1fr);
+  }
+}
+
+@media screen and (max-width: 768px) {
+  .section_type_techs {
+    margin: 90px 50px;
+  }
+  .techs__subheading {
+    margin: 80px auto 0;
+  }
+  .techs__description {
+    margin: 22px auto 83px;
+    font-size: 12px;
+    line-height: 1.5;
+  }
+  .tech__list-item {
+    font-size: 12px;
+  }
+}
+
+@media screen and (max-width: 580px) {
+  .techs__list {
+    grid-template-columns: repeat(2, 84px);
+    grid-template-rows: auto;
+    grid-row-gap: 10px;
+    width: unset;
+  }
+  .techs__description {
+    margin: 22px auto 50px;
+  }
+}
+
+@media screen and (max-width: 426px) {
+  .techs {
+    background-color: rgba(250, 250, 250, 1);
+  }
+  .section_type_techs {
+    margin: 70px 44px;
+  }
+  .techs__subheading {
+    font-size: 30px;
+    line-height: 1.21;
+    margin: 60px auto 0;
+  }
+  .techs__description {
+    font-size: 11px;
+    line-height: 1.45;
+    margin: 24px auto 50px;
+  }
+}
+
+@media screen and (max-width: 320px) {
+  .section_type_techs {
+    margin: 60px 18px;
+  }
+}
