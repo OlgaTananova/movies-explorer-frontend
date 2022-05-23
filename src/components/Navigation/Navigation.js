@@ -3,12 +3,13 @@ import {Link} from 'react-router-dom';
 import {useEffect, useState} from 'react';
 import NavigationLinks from '../NavigationLinks/NavigationLinks';
 import NavigationPopup from '../NavigationPopup/NavigationPopup';
+import {BIG_SCREEN} from '../../utils/utils';
 
 function Navigation({isLoggedIn}) {
   const [screenWidth, setScreenWidth] = useState(window.screen.width);
   const [windowOuterWidth, setWindowOuterWidth] = useState(window.outerWidth);
   const [showBurgerMenu, setShowBurgerMenu] = useState(false);
-  const showNavBurgerButton = windowOuterWidth <= 768 || screenWidth <= 768;
+  const showNavBurgerButton = windowOuterWidth <= BIG_SCREEN || screenWidth <= BIG_SCREEN;
 
   function traceScreenWidth() {
     setScreenWidth(window.screen.width);

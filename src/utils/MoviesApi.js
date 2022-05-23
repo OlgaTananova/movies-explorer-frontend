@@ -1,4 +1,4 @@
-import {moviesBaseUrl} from './utils';
+import {MOVIES_BASE_URL} from './utils';
 
 function checkResponse(response) {
   if (response.ok) {
@@ -9,7 +9,7 @@ function checkResponse(response) {
 }
 
 export default function getMovies() {
-  return fetch(moviesBaseUrl, {
+  return fetch(MOVIES_BASE_URL, {
     method: 'GET', headers: {
       'Content-Type': 'application/json'
     }

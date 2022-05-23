@@ -1,4 +1,5 @@
-import {baseUrl} from './utils';
+import {BASE_URL} from './utils';
+
 
 const headers = {
   "Content-Type": "application/json",
@@ -15,7 +16,7 @@ const checkResponse = ((response) => {
 })
 
 export const signUp = ((name, email, password) => {
-  return fetch(`${baseUrl}/signup`, {
+  return fetch(`${BASE_URL}/signup`, {
     method: 'POST', headers: headers, body: JSON.stringify({
       "name": name, "password": password, "email": email
     })
@@ -26,7 +27,7 @@ export const signUp = ((name, email, password) => {
 })
 
 export const signIn = ((email, password) => {
-  return fetch(`${baseUrl}/signin`, {
+  return fetch(`${BASE_URL}/signin`, {
     method: 'POST', headers: headers, body: JSON.stringify({
       "password": password, "email": email
     }), credentials: 'include'
@@ -37,7 +38,7 @@ export const signIn = ((email, password) => {
 })
 
 export const verifyUser = () => {
-  return fetch(`${baseUrl}/users/me`, {
+  return fetch(`${BASE_URL}/users/me`, {
     method: "GET", headers: {
       "Content-Type": "application/json"
     }, credentials: 'include'
@@ -48,7 +49,7 @@ export const verifyUser = () => {
 }
 
 export const logOut = () => {
-  return fetch(`${baseUrl}/signout`, {
+  return fetch(`${BASE_URL}/signout`, {
     method: "POST", headers: {
       "Content-Type": "application/json"
     }, credentials: 'include'
@@ -59,7 +60,7 @@ export const logOut = () => {
 }
 
 export const getCurrentUser = () => {
-  return fetch(`${baseUrl}/users/me`, {
+  return fetch(`${BASE_URL}/users/me`, {
     method: 'GET', headers: {
       "Content-Type": "application/json"
     }, credentials: 'include'
@@ -70,7 +71,7 @@ export const getCurrentUser = () => {
 }
 
 export const editUserProfile = (name, email) => {
-  return fetch(`${baseUrl}/users/me`, {
+  return fetch(`${BASE_URL}/users/me`, {
     method: 'PATCH', headers: {
       "Content-Type": "application/json"
     }, credentials: 'include', body: JSON.stringify({
@@ -83,7 +84,7 @@ export const editUserProfile = (name, email) => {
 }
 
 export const saveMovie = (movie) => {
-  return fetch(`${baseUrl}/movies`, {
+  return fetch(`${BASE_URL}/movies`, {
     method: 'POST', headers: {
       "Content-Type": "application/json"
     }, credentials: 'include', body: JSON.stringify({
@@ -106,7 +107,7 @@ export const saveMovie = (movie) => {
 }
 
 export const deleteMovie = (id) => {
-  return fetch(`${baseUrl}/movies/${id}`, {
+  return fetch(`${BASE_URL}/movies/${id}`, {
     method: 'DELETE', headers: {
       "Content-Type": "application/json"
     }, credentials: 'include',
@@ -117,7 +118,7 @@ export const deleteMovie = (id) => {
 }
 
 export const getSavedMovies = () => {
-  return fetch(`${baseUrl}/movies`, {
+  return fetch(`${BASE_URL}/movies`, {
     method: "GET", headers: {
       "Content-Type": "application/json"
     }, credentials: 'include'

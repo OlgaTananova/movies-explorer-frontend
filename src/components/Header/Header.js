@@ -7,7 +7,7 @@ function Header({isLoggedIn}) {
   const location = useLocation();
 
   function Logo() {
-    return (<Link to={'/movies'}><img className='logo'
+    return (<Link to={'/'}><img className='logo'
                                       alt='Логотип проекта'
                                       src={logo}/></Link>)
   }

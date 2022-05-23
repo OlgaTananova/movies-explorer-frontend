@@ -1,7 +1,7 @@
 import './Footer.css';
 import {useLocation, Link} from 'react-router-dom';
 
-function Footer({onLogOut, isEditProfile}) {
+function Footer() {
   const location = useLocation();
   if (location.pathname === '/' || location.pathname === '/saved-movies' || location.pathname === '/movies') {
     return (<footer className='footer'>
@@ -26,14 +26,6 @@ function Footer({onLogOut, isEditProfile}) {
                  className='footer__social-icon footer-text'>Facebook</a>
             </nav>
           </div>
-        </div>
-      </footer>)
-  } else if (location.pathname === '/profile') {
-    return (<footer className='footer'>
-        <div className='section section_type_footer'>
-          {!isEditProfile && <Link className='footer__logout-link footer-text'
-                                   to={'/'}
-                                   onClick={onLogOut}>Выйти из аккаунта</Link>}
         </div>
       </footer>)
   } else if (location.pathname === '/signup') {

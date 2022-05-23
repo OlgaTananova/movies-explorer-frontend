@@ -22,6 +22,7 @@ import {searchMovies, saveToLocalStorage} from '../../utils/utils';
 function App() {
   const [currentUser, setCurrentUser] = useState({});
   const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [isUserChecked, setIsUserChecked] = useState(false);
   const [isEditProfile, setIsEditProfile] = useState(false);
   const [editProfileMessage, setEditProfileMessage] = useState('')
   const [errorMessage, setErrorMessage] = useState('');
@@ -30,30 +31,32 @@ function App() {
   const [isLoading, setIsLoading] = useState(false);
   const [searchCount, setSearchCount] = useState(0);
   const [savedMovies, setSavedMovies] = useState([]);
-  const navigate = useNavigate();
   const location = useLocation();
-
-  function tokenCheck() {
-    mainApi.verifyUser()
-      .then(() => {
-        setIsLoggedIn(true);
-      })
-      .catch((err) => {
-        setErrorMessage(err.message)
-      })
-  }
+  const navigate = useNavigate();
 
   function closePopups() {
     setInfoToolTipOpen(false);
   }
 
+  function handleEditProfileClick() {
+    setIsEditProfile(true);
+  }
+
+  function tokenCheck() {
+    mainApi.verifyUser()
+      .then(() => {
+        setIsUserChecked(true);
+        setIsLoggedIn(true);
+      })
+      .catch((err) => {
+        setErrorMessage(err.message);
+        setIsUserChecked(true);
+      })
+  }
+
   useEffect(() => {
     tokenCheck();
   }, []);
-
-  useEffect(() => {
-    isLoggedIn && navigate('/movies');
-  }, [isLoggedIn])
 
   useEffect(() => {
     if (isLoggedIn) {
@@ -80,17 +83,14 @@ function App() {
     }
   }, [isInfoToolTipOpen])
 
-  function handleEditProfileClick() {
-    setIsEditProfile(true);
-  }
 
   function handleEditProfile({name, email}) {
-    setIsEditProfile(false);
     setIsLoading(true);
     mainApi.editUserProfile(name, email)
       .then((data) => {
         setCurrentUser({name: data.name, email: data.email});
         setIsLoading(false);
+        setIsEditProfile(false);
         setEditProfileMessage('Данные пользователя успешно обновлены!')
         setInfoToolTipOpen(true);
       })
@@ -107,61 +107,56 @@ function App() {
     });
     const isLiked = Boolean(handledMovie);
     const id = handledMovie ? handledMovie._id : null;
-    setIsLoading(true);
     if (isLiked) {
       mainApi.deleteMovie(id)
-        .then(() => mainApi.getSavedMovies())
-        .then((movies) => {
-          setSavedMovies(movies);
-          setIsLoading(false);
+        .then(() => {
+          const newSavedMovies = savedMovies.filter((m) => {
+            return m._id !== id
+          })
+          setSavedMovies(() => newSavedMovies);
         })
         .catch((err) => {
           setErrorMessage(err.message);
-          setIsLoading(false);
           setInfoToolTipOpen(true);
         })
     } else {
       mainApi.saveMovie(movie)
-        .then(() => mainApi.getSavedMovies())
-        .then((movies) => {
-          setSavedMovies(movies);
-          setIsLoading(false);
+        .then((m) => {
+          setSavedMovies((prev) => [...prev, m]);
         })
         .catch((err) => {
           setErrorMessage(err.message);
-          setIsLoading(false);
           setInfoToolTipOpen(true);
         })
     }
   }
 
   function handleMovieDislike(id) {
-    setIsLoading(true);
     mainApi.deleteMovie(id)
-      .then(() => mainApi.getSavedMovies())
-      .then((movies) => {
-        setSavedMovies(movies);
-        setIsLoading(false);
+      .then(() => {
+        const newSavedMovies = savedMovies.filter((m) => {
+          return m._id !== id
+        })
+        setSavedMovies(() => newSavedMovies);
       })
       .catch((err) => {
         setErrorMessage(err.message);
-        setIsLoading(false);
         setInfoToolTipOpen(true);
       })
   }
 
   function handleSearchMovies(searchInput, isFormValid, isShortMovies) {
-    const movies = sessionStorage.getItem('movies');
-    if (!isFormValid) {
+    const movies = JSON.parse(localStorage.getItem('movies'));
+    if (!isFormValid || !searchInput) {
       setErrorMessage('Нужно ввести ключевое слово');
       setInfoToolTipOpen(true);
     } else if (!movies) {
       setIsLoading(true);
       getMovies()
-        .then((movies) => {
-          sessionStorage.setItem('movies', JSON.stringify(movies));
+        .then((moviesList) => {
+          localStorage.setItem('movies', JSON.stringify(moviesList));
           setIsLoading(false);
-          const searchedFilms = searchMovies(movies, isShortMovies, searchInput);
+          const searchedFilms = searchMovies(moviesList, isShortMovies, searchInput);
           saveToLocalStorage(searchedFilms, isShortMovies, searchInput);
           setSearchCount(prevState => prevState + 1)
         })
@@ -170,7 +165,7 @@ function App() {
           setIsLoading(false);
         })
     } else if (searchInput) {
-      const searchedFilms = searchMovies(JSON.parse(movies), isShortMovies, searchInput);
+      const searchedFilms = searchMovies(movies, isShortMovies, searchInput);
       saveToLocalStorage(searchedFilms, isShortMovies, searchInput);
       setSearchCount(prevState => prevState + 1);
     }
@@ -183,10 +178,13 @@ function App() {
         setIsLoading(false);
         setCurrentUser(data);
         setIsLoggedIn(true);
+        setIsUserChecked(true);
+        navigate('/movies');
       })
       .catch(err => {
         setErrorMessage(err.message);
         setIsLoading(false);
+        setIsUserChecked(true);
         setInfoToolTipOpen(true);
       })
   }
@@ -197,10 +195,13 @@ function App() {
       .then(() => mainApi.signIn(email, password))
       .then(() => {
         setIsLoggedIn(true);
+        setIsUserChecked(true);
+        navigate('/movies');
       })
       .catch((err) => {
         setErrorMessage(err.message);
         setIsLoading(false);
+        setIsUserChecked(true);
         setInfoToolTipOpen(true);
       })
   }
@@ -209,12 +210,12 @@ function App() {
     setIsLoading(true);
     mainApi.logOut()
       .then(() => {
+        setIsUserChecked(false);
         setIsLoading(false);
         setIsLoggedIn(false);
         setCurrentUser(null)
         setSearchCount(0);
         localStorage.clear();
-        sessionStorage.clear();
       })
       .catch((err) => {
         setErrorMessage(err.message);
@@ -228,38 +229,38 @@ function App() {
     <Routes>
       <Route path={'/'}
              element={<Main isLoggedIn={isLoggedIn}/>}> </Route>
-      <Route path={'/movies'}
-             element={<ProtectedRoute isLoggedIn={isLoggedIn}>
-               <Movies onLike={handleMovieLike}
-                       isLoading={isLoading}
-                       onSearchMovies={handleSearchMovies}
-                       errorMessage={errorMoviesMessage}
-                       savedMovies={savedMovies}
-                       searchCount={searchCount}/></ProtectedRoute>}>{}</Route>
-      <Route path={'/saved-movies'}
-             element={<ProtectedRoute isLoggedIn={isLoggedIn}>
-               <SavedMovies savedMovies={savedMovies}
-                            isLoading={isLoading}
-                            onLike={handleMovieLike}
-                            onDislike={handleMovieDislike}/></ProtectedRoute>}> </Route>
-      <Route path={'/profile'}
-             element={
-               <ProtectedRoute isLoggedIn={isLoggedIn}><Profile onEditProfileClick={handleEditProfileClick}
-                                                                isEditProfile={isEditProfile}
-                                                                onEditProfile={handleEditProfile}
-                                                                editProfileMessage={editProfileMessage}/></ProtectedRoute>}>{}</Route>
+      {isUserChecked && <>
+        <Route path={'/movies'}
+               element={<ProtectedRoute isLoggedIn={isLoggedIn}>
+                 <Movies
+                        onLike={handleMovieLike}
+                         isLoading={isLoading}
+                         onSearchMovies={handleSearchMovies}
+                         errorMessage={errorMoviesMessage}
+                         savedMovies={savedMovies}
+                         searchCount={searchCount}/></ProtectedRoute>}>{}</Route>
+        <Route path={'/saved-movies'}
+               element={<ProtectedRoute isLoggedIn={isLoggedIn}>
+                 <SavedMovies savedMovies={savedMovies}
+                              isLoading={isLoading}
+                              onLike={handleMovieLike}
+                              onDislike={handleMovieDislike}/></ProtectedRoute>}> </Route>
+        <Route path={'/profile'}
+               element={
+                 <ProtectedRoute isLoggedIn={isLoggedIn}><Profile onEditProfile={handleEditProfile}
+                                                                  isEditProfile={isEditProfile}
+                                                                  onEditProfileClick={handleEditProfileClick}
+                                                                  onLogOut={handleLogOut}
+                                                                  editProfileMessage={editProfileMessage}/></ProtectedRoute>}>{}</Route>
+      </>}
       <Route path={'/signup'}
              element={<Register onRegister={handleRegister}/>}> </Route>
       <Route path={'/signin'}
              element={<Login onLogin={handleLogin}/>}> </Route>
-      <Route path={'/404'}
-             element={<NotFound/>}> </Route>
       <Route path={'*'}
              element={<NotFound/>}> </Route>
     </Routes>
-    <Footer isLoggedIn={isLoggedIn}
-            onLogOut={handleLogOut}
-            isEditProfile={isEditProfile}/>
+    <Footer isLoggedIn={isLoggedIn}/>
     <InfoToolTip errorMessage={errorMessage}
                  isOpen={isInfoToolTipOpen}
                  onClose={closePopups}

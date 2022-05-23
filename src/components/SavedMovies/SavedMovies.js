@@ -8,22 +8,20 @@ import SearchNotification from '../SearchNotification/SearchNotification';
 import {searchMovies, showShortMovies} from '../../utils/utils';
 
 function SavedMovies({savedMovies, isLoading, onLike, onDislike}) {
-  const savedMoviesCount = savedMovies.length;
   const [savedMoviesError, setSavedMoviesError] = useState('');
   const [isShortMoviesInSM, setIsShortMoviesInSM] = useState(false);
   const [showedMovies, setShowedMovies] = useState(savedMovies);
   const [savedMoviesSearchCount, setSavedMoviesSearchCount] = useState(0);
 
   useEffect(() => {
-    setShowedMovies(() => setShowedMovies(savedMovies));
+    if (savedMovies.length === 0) {
+      setSavedMoviesError('У вас нет сохраненных фильмов')
+    } else {
+      setShowedMovies(savedMovies);
+      setSavedMoviesError('');
+    }
   }, [savedMovies])
 
-  useEffect(() => {
-    if (savedMoviesCount === 0) {
-      setSavedMoviesError('У вас нет сохраненных фильмов.');
-      setSavedMoviesSearchCount(0);
-    }
-  }, [savedMoviesCount, savedMoviesError])
 
   function handleSearchSavedMovies(searchInput, isShortMovies, reset) {
     const searchedFilms = searchMovies(savedMovies, isShortMovies, searchInput);
@@ -42,21 +40,28 @@ function SavedMovies({savedMovies, isLoading, onLike, onDislike}) {
     setIsShortMoviesInSM(!isShortMoviesInSM)
     if (!isShortMoviesInSM && savedMovies) {
       const showedShortMovies = showShortMovies(savedMovies);
-      setShowedMovies(showedShortMovies);
+      if (showedShortMovies.length === 0) {
+        setSavedMoviesError('Ничего не найдено');
+        setShowedMovies([]);
+      } else {
+        setShowedMovies(showedShortMovies);
+      }
     } else if (isShortMoviesInSM && savedMovies) {
-      setShowedMovies(savedMovies)
+      setSavedMoviesError('');
+      setShowedMovies(savedMovies);
     }
   }
 
   function handleSearchClear() {
     setShowedMovies(savedMovies);
     setSavedMoviesError('');
+    setIsShortMoviesInSM(false);
   }
 
   if (isLoading) {
     return (<>
       <SearchForm isShortMovies={isShortMoviesInSM}
-                  disabled={savedMoviesCount === 0}
+                  disabled={!savedMovies.length}
                   onSearchSavedMovies={handleSearchSavedMovies}
                   onToggle={toggleShortMoviesFilter}/>
       <div className={'saved-movies'}>
@@ -66,12 +71,12 @@ function SavedMovies({savedMovies, isLoading, onLike, onDislike}) {
   } else if (savedMoviesError) {
     return (<>
       <SearchForm isShortMovies={isShortMoviesInSM}
-                  disabled={savedMoviesCount === 0}
+                  disabled={!savedMovies.length}
                   onSearchSavedMovies={handleSearchSavedMovies}
                   onToggle={toggleShortMoviesFilter}/>
       <div className={'saved-movies'}>
         <SearchNotification content={savedMoviesError}/>
-        {(showedMovies && showedMovies.length === 0 && savedMoviesSearchCount !== 0 && savedMoviesError) ?
+        {(showedMovies.length === 0 && savedMoviesSearchCount !== 0 && savedMoviesError) ?
           <button type={'button'}
                   className={'saved-movies__return-button'}
                   onClick={handleSearchClear}>Вернуться</button> : null}
@@ -81,7 +86,7 @@ function SavedMovies({savedMovies, isLoading, onLike, onDislike}) {
     return (<>
       <SearchForm isShortMovies={isShortMoviesInSM}
                   onSearchSavedMovies={handleSearchSavedMovies}
-                  disabled={savedMoviesCount === 0}
+                  disabled={!savedMovies.length}
                   onToggle={toggleShortMoviesFilter}/>
       <div className={'saved-movies'}>
         <MoviesCardList showedMovies={showedMovies}

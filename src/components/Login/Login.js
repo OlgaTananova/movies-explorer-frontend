@@ -27,7 +27,8 @@ function Login({onLogin}) {
           <div className={'auth-form__fieldset'}>
             <Input name={'email'}
                    error={validator.errors.email}
-                   type={'email'}
+                   type={'text'}
+                   pattern={'^\\w+([\\.-]?\\w+)*@\\w+([\\.-]?\\w+)*(\\.\\w{2,3})+$'}
                    placeholder={'Email'}
                    required={true}
                    value={validator.values.email}

@@ -1,6 +1,6 @@
 import './MoviesCard.css';
 import {useLocation} from 'react-router-dom';
-import {movieImageBaseUrl, MINUTESINHOUR} from '../../utils/utils';
+import {MOVIE_IMAGE_BASE_URL, MINUTES_IN_HOUR} from '../../utils/utils';
 
 function MoviesCard(props) {
   const location = useLocation();
@@ -17,18 +17,18 @@ function MoviesCard(props) {
     onLike,
     onDislike
   } = props;
-  const image = location.pathname === '/saved-movies' ? props.image : `${movieImageBaseUrl}${props.image.url}`;
-  const thumbnail = location.pathname === '/saved-movies' ? props.thumbnail : `${movieImageBaseUrl}${props.image.formats.thumbnail.url}`;
+  const image = location.pathname === '/saved-movies' ? props.image : `${MOVIE_IMAGE_BASE_URL}${props.image.url}`;
+  const thumbnail = location.pathname === '/saved-movies' ? props.thumbnail : `${MOVIE_IMAGE_BASE_URL}${props.image.formats.thumbnail.url}`;
   const isLiked = props.savedMovies.some((movie) => {
     return movie.movieId === id;
   });
 
   function displayDuration() {
-    if (duration < MINUTESINHOUR) {
+    if (duration < MINUTES_IN_HOUR) {
       return duration
     }
-    const hours = Math.floor(duration / MINUTESINHOUR);
-    const minutes = duration - (MINUTESINHOUR * hours);
+    const hours = Math.floor(duration / MINUTES_IN_HOUR);
+    const minutes = duration - (MINUTES_IN_HOUR * hours);
     return {hours, minutes}
   }
 
@@ -67,10 +67,10 @@ function MoviesCard(props) {
                                                        aria-label={'Иконка удаление фильма из списка сохраненных фильмов'}>{}</button> :
         <button type={'button'}
                 aria-label={'Иконка сохранения фильма в список сохраненных фильмов'}
-                className={`movies-card__button movies-card__button_type_like ${isLiked && 'movies-card__button_type_like_liked'}`}
+                className={`movies-card__button movies-card__button_type_like ${isLiked&& 'movies-card__button_type_like_liked'}`}
                 onClick={handleLike}>{}</button>}
     </div>
-    <p className={'movies-card__duration'}>{duration < MINUTESINHOUR ? `${displayDuration()}м` : `${displayDuration().hours}ч ${displayDuration().minutes}м`}</p>
+    <p className={'movies-card__duration'}>{duration < MINUTES_IN_HOUR ? `${displayDuration()}м` : `${displayDuration().hours}ч ${displayDuration().minutes}м`}</p>
   </div>)
 
 }

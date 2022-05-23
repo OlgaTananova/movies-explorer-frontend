@@ -36,7 +36,8 @@ function Register({onRegister}) {
                  onChange={validator.handleChange}
                  error={validator.errors.name}/>
           <Input name={'email'}
-                 type={'email'}
+                 type={'text'}
+                 pattern={'^\\w+([\\.-]?\\w+)*@\\w+([\\.-]?\\w+)*(\\.\\w{2,3})+$'}
                  placeholder={'Email'}
                  required={true}
                  value={validator.values.email}
