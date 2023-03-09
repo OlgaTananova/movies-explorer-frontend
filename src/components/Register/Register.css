@@ -1,0 +1,16 @@
+.register {
+  display: flex;
+  width: 100%;
+}
+
+.section_type_register {
+  display: flex;
+  margin: 0 auto;
+  width: 396px;
+}
+
+@media screen and (max-width: 426px) {
+  .section_type_register {
+    width: 260px;
+  }
+}

@@ -1,0 +1,15 @@
+.login {
+  display: flex;
+  width: 100%;
+}
+
+.section_type_login {
+  margin: 0 auto;
+  width: 396px;
+}
+
+@media screen and (max-width: 426px) {
+  .section_type_login {
+    width: 260px;
+  }
+}
