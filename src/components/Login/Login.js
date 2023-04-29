@@ -3,25 +3,45 @@ import AuthForm from '../AuthForm/AuthForm';
 import Input from '../Input/Input';
 import useForm from '../../utils/useForm';
 import {useMemo} from 'react';
+import {
+  setIsLoadingFalse, setIsLoadingTrue, setIsUserCheckedTrue, setShowErrorTrue
+} from '../../store/appSlice';
+import {signInUser} from '../../store/userSlice';
+import {useDispatch} from 'react-redux';
+import {useNavigate} from 'react-router-dom';
 
-function Login({onLogin}) {
+function Login() {
+  const dispatch = useDispatch();
+
   const initialValues = useMemo(() => {
     return {
       email: '', password: ''
     }
   }, [])
   const validator = useForm(initialValues);
+  const navigate = useNavigate();
 
   function handleSubmit(e) {
     e.preventDefault();
-    onLogin(validator.values)
+    dispatch(setIsLoadingTrue());
+    dispatch(signInUser(validator.values)).unwrap()
+      .then(() => {
+        dispatch(setIsLoadingFalse());
+        dispatch(setIsUserCheckedTrue());
+        navigate('/');
+      })
+      .catch(err => {
+        dispatch(setShowErrorTrue(err.message));
+        dispatch(setIsLoadingFalse());
+        dispatch(setIsUserCheckedTrue());
+      })
   }
 
   return (<div className='login'>
       <div className='section section_type_login'>
         <AuthForm name={'login'}
-                  heading={'Рады видеть!'}
-                  submitButton={'Войти'}
+                  heading={'Welcome back!'}
+                  submitButton={'Log in'}
                   isValid={validator.isValid}
                   onSubmit={handleSubmit}>
           <div className={'auth-form__fieldset'}>
@@ -37,7 +57,7 @@ function Login({onLogin}) {
                    error={validator.errors.password}
                    type={'password'}
                    required={true}
-                   placeholder={'Пароль'}
+                   placeholder={'Password'}
                    value={validator.values.password}
                    onChange={validator.handleChange}/>
           </div>

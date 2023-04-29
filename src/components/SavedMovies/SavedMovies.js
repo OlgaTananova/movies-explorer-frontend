@@ -5,17 +5,20 @@ import Preloader from '../Preloader/Preloader';
 import {useState} from 'react';
 import {useEffect} from 'react';
 import SearchNotification from '../SearchNotification/SearchNotification';
-import {searchMovies, showShortMovies} from '../../utils/utils';
+import {searchMovies, showHighRatingMovies} from '../../utils/utils';
+import {useAppSelector} from '../../store/hooks';
 
-function SavedMovies({savedMovies, isLoading, onLike, onDislike}) {
+function SavedMovies({ onLike, onDislike}) {
+  const savedMovies = useAppSelector((state) => state.movie.savedMovies);
+  const isLoading = useAppSelector((state) => state.app.isLoading);
   const [savedMoviesError, setSavedMoviesError] = useState('');
-  const [isShortMoviesInSM, setIsShortMoviesInSM] = useState(false);
+  const [isHighRatingMoviesInSM, setIsHighRatingMoviesInSM] = useState(false);
   const [showedMovies, setShowedMovies] = useState(savedMovies);
   const [savedMoviesSearchCount, setSavedMoviesSearchCount] = useState(0);
 
   useEffect(() => {
     if (savedMovies.length === 0) {
-      setSavedMoviesError('У вас нет сохраненных фильмов')
+      setSavedMoviesError('You have no saved movies.')
     } else {
       setShowedMovies(savedMovies);
       setSavedMoviesError('');
@@ -23,30 +26,30 @@ function SavedMovies({savedMovies, isLoading, onLike, onDislike}) {
   }, [savedMovies])
 
 
-  function handleSearchSavedMovies(searchInput, isShortMovies, reset) {
-    const searchedFilms = searchMovies(savedMovies, isShortMovies, searchInput);
+  function handleSearchSavedMovies(searchInput, isHighRatingMovies, reset) {
+    const searchedFilms = searchMovies(savedMovies, isHighRatingMovies, searchInput);
     if (searchedFilms.length === 0) {
-      setSavedMoviesError('Ничего не найдено.')
+      setSavedMoviesError('No movies found.')
       setShowedMovies([]);
       setSavedMoviesSearchCount((prev) => prev + 1);
       reset();
     } else {
-      setShowedMovies(searchedFilms);
+      setShowedMovies(() => searchedFilms);
       setSavedMoviesSearchCount((prev) => prev + 1);
     }
   }
 
-  function toggleShortMoviesFilter() {
-    setIsShortMoviesInSM(!isShortMoviesInSM)
-    if (!isShortMoviesInSM && savedMovies) {
-      const showedShortMovies = showShortMovies(savedMovies);
+  function toggleHighRatingMoviesFilter() {
+    setIsHighRatingMoviesInSM(!isHighRatingMoviesInSM)
+    if (!isHighRatingMoviesInSM && savedMovies) {
+      const showedShortMovies = showHighRatingMovies(savedMovies, 'rating');
       if (showedShortMovies.length === 0) {
-        setSavedMoviesError('Ничего не найдено');
+        setSavedMoviesError('No movies found.');
         setShowedMovies([]);
       } else {
         setShowedMovies(showedShortMovies);
       }
-    } else if (isShortMoviesInSM && savedMovies) {
+    } else if (isHighRatingMoviesInSM && savedMovies) {
       setSavedMoviesError('');
       setShowedMovies(savedMovies);
     }
@@ -55,39 +58,39 @@ function SavedMovies({savedMovies, isLoading, onLike, onDislike}) {
   function handleSearchClear() {
     setShowedMovies(savedMovies);
     setSavedMoviesError('');
-    setIsShortMoviesInSM(false);
+    setIsHighRatingMoviesInSM(false);
   }
 
   if (isLoading) {
     return (<>
-      <SearchForm isShortMovies={isShortMoviesInSM}
+      <SearchForm isHighRatingMovies={isHighRatingMoviesInSM}
                   disabled={!savedMovies.length}
                   onSearchSavedMovies={handleSearchSavedMovies}
-                  onToggle={toggleShortMoviesFilter}/>
+                  onToggle={toggleHighRatingMoviesFilter}/>
       <div className={'saved-movies'}>
         <Preloader movies={true}/>
       </div>
     </>)
   } else if (savedMoviesError) {
     return (<>
-      <SearchForm isShortMovies={isShortMoviesInSM}
+      <SearchForm isHighRatingMovies={isHighRatingMoviesInSM}
                   disabled={!savedMovies.length}
                   onSearchSavedMovies={handleSearchSavedMovies}
-                  onToggle={toggleShortMoviesFilter}/>
+                  onToggle={toggleHighRatingMoviesFilter}/>
       <div className={'saved-movies'}>
         <SearchNotification content={savedMoviesError}/>
         {(showedMovies.length === 0 && savedMoviesSearchCount !== 0 && savedMoviesError) ?
           <button type={'button'}
                   className={'saved-movies__return-button'}
-                  onClick={handleSearchClear}>Вернуться</button> : null}
+                  onClick={handleSearchClear}>Go back</button> : null}
       </div>
     </>)
   } else {
     return (<>
-      <SearchForm isShortMovies={isShortMoviesInSM}
+      <SearchForm isHighRatingMovies={isHighRatingMoviesInSM}
                   onSearchSavedMovies={handleSearchSavedMovies}
                   disabled={!savedMovies.length}
-                  onToggle={toggleShortMoviesFilter}/>
+                  onToggle={toggleHighRatingMoviesFilter}/>
       <div className={'saved-movies'}>
         <MoviesCardList showedMovies={showedMovies}
                         savedMovies={savedMovies}

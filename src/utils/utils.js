@@ -1,8 +1,10 @@
-export const MOVIE_IMAGE_BASE_URL = 'https://api.nomoreparties.co';
-export const MOVIES_BASE_URL = 'https://api.nomoreparties.co/beatfilm-movies';
-export const BASE_URL = 'https://api.movie-explorerbyolga.nomoredomains.work';
-export const MINUTES_IN_HOUR = 60;
-export const SHORT_MOVIE_DURATION = 40;
+import {useAppSelector} from '../store/hooks';
+
+export const MOVIE_IMAGE_BASE_URL = 'https://image.tmdb.org/t/p/original';
+export const MOVIES_BASE_URL = 'https://api.themoviedb.org/3';
+export const MOVIES_DETAILS_BASE_URL = 'https://www.themoviedb.org/movie';
+export const BASE_URL = 'http://localhost:3000';
+export const HIGH_RATING = 6;
 export const BIG_SCREEN_MOVIES_QTY = 12;
 export const MIDDLE_SCREEN_MOVIES_QTY = 8;
 export const SMALL_SCREEN_MOVIES_QTY = 5;
@@ -10,35 +12,41 @@ export const MORE_MOVIES_BIG_SCREEN_QTY = 3;
 export const MORE_MOVIES_SMALL_SCREEN_QTY = 2;
 export const BIG_SCREEN = 768;
 export const SMALL_SCREEN = 480;
+export const DOTS = '...';
 
-export function searchMovies(movies, isShortMovies, searchInput) {
+export function searchMovies(movies, isHighRatingMovies, searchInput) {
   let searchedMovies;
   if (!movies) {
     return null
-  } else if (isShortMovies) {
+  } else if (isHighRatingMovies) {
     searchedMovies = movies.filter((movie) => {
-      return (movie.nameRU.toLowerCase().includes(searchInput.toLowerCase().trim()) || movie.description.toLowerCase().includes(searchInput.toLowerCase().trim())) && movie.duration <= SHORT_MOVIE_DURATION;
+      return (movie.title.toLowerCase().includes(searchInput.toLowerCase().trim()) || movie.overview.toLowerCase().includes(searchInput.toLowerCase().trim())) && movie.vote_average >= HIGH_RATING;
     })
   } else {
     searchedMovies = movies.filter((movie) => {
-      return (movie.nameRU.toLowerCase().includes(searchInput.toLowerCase().trim()) || movie.description.toLowerCase().includes(searchInput.toLowerCase().trim()))
+      return (movie.title.toLowerCase().includes(searchInput.toLowerCase().trim()) || movie.overview.toLowerCase().includes(searchInput.toLowerCase().trim()))
     })
   }
   return searchedMovies;
 }
 
-export function saveToLocalStorage(searchedMovies, isShortMovies, searchInput) {
-  localStorage.setItem('searchInput', searchInput);
-  localStorage.setItem('isShortMovies', JSON.stringify(isShortMovies));
-  localStorage.setItem('searchedMovies', JSON.stringify(searchedMovies));
+
+export function showHighRatingMovies(showedMovies, movieField) {
+  if (showedMovies) {
+    return showedMovies.filter((movie) => {
+      return movie[movieField] >= HIGH_RATING;
+    })
+  }
 }
 
-export function showShortMovies(showedMovies) {
-  return showedMovies.filter((movie) => {
-    return movie.duration <= SHORT_MOVIE_DURATION;
-  })
+export function range (start, end) {
+  let length = end - start + 1;
+  /*
+  	Create an array of certain length and set the elements within it from
+    start value to end value.
+  */
+  return Array.from({ length }, (_, idx) => idx + start);
 }
-
 
 
 

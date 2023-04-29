@@ -33,6 +33,13 @@
   width: 100%;
 }
 
+.search-form__select {
+  border: none;
+}
+
+.search-form__select:focus {
+  outline: none;
+}
 .search-form__input:focus {
   background-image: none;
   background-color: rgba(221, 222, 227, 1);

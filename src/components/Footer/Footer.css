@@ -13,7 +13,7 @@
 
 .section_type_footer-signup {
   width: 396px;
-  background-color: rgba(255, 255, 255, 1);
+  background-color: rgba(248, 248, 248, 1);
   margin: 16px auto 70px;
   display: flex;
   justify-content: center;
@@ -27,9 +27,27 @@
   margin: 65px auto 20px;
 }
 
+.footer__heading-block {
+  display: flex;
+  justify-content: center;
+  gap: 20px;
+}
+
 .footer-text {
   font-size: 13px;
   line-height: 1.2;
+}
+
+.footer-TMDB {
+  margin: 0;
+}
+
+.footer-icon {
+  width: 40px;
+  height: 40px;
+  background-image: url('../../images/TMDB_logo.svg');
+  background-repeat: no-repeat;
+  background-position: top;
 }
 
 .footer__links-copyright-element {
@@ -83,6 +101,9 @@
   }
   .footer__heading {
     margin: 63px auto 20px;
+  }
+  .footer-TMDB {
+    margin: 0;
   }
 }
 
