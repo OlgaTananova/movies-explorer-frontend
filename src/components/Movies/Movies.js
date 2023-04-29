@@ -5,160 +5,128 @@ import SearchForm from '../SearchForm/SearchForm';
 import SearchNotification from '../SearchNotification/SearchNotification';
 import {useEffect, useState} from 'react';
 import {
-  showShortMovies,
-  saveToLocalStorage,
-  searchMovies,
+  showHighRatingMovies,
   BIG_SCREEN_MOVIES_QTY,
   MIDDLE_SCREEN_MOVIES_QTY,
   SMALL_SCREEN_MOVIES_QTY,
   MORE_MOVIES_BIG_SCREEN_QTY,
   MORE_MOVIES_SMALL_SCREEN_QTY,
   BIG_SCREEN,
-  SMALL_SCREEN
+  SMALL_SCREEN,
 } from '../../utils/utils';
+import Pagination from '../Pagination/Pagination';
+import {useAppSelector} from '../../store/hooks';
 
 function Movies({
-                  onLike,
-                  savedMovies,
-                  isLoading,
-                  onSearchMovies,
-                  searchCount,
-                  errorMessage
+                  onLike, onSearchMovies, onPageChange,
                 }) {
-  const searchedMoviesInLS = JSON.parse(localStorage.getItem('searchedMovies'));
-  const isShortMoviesInLS = JSON.parse(localStorage.getItem('isShortMovies'));
-  const [searchedMovies, setSearchedMovies] = useState(searchedMoviesInLS === null ? [] : searchedMoviesInLS);
-  const [isShortMovies, setIsShortMovies] = useState(isShortMoviesInLS ? isShortMoviesInLS : false);
-  const [screenWidth, setScreenWidth] = useState(window.screen.width);
-  const [windowOuterWidth, setWindowOuterWidth] = useState(window.outerWidth);
+  const currentPage = useAppSelector((state) => state.movie.currentPage);
+  const totalPageCount = useAppSelector((state) => state.movie.totalPageCount);
+  const currentSearch = useAppSelector((state) => state.movie.currentQuery);
+  const isLoading = useAppSelector((state) => state.app.isLoading);
+  const searchCount = useAppSelector((state) => state.movie.searchCount);
+  const errorMessage = useAppSelector((state) => state.app.errorMessage);
+  const screenWidth = useAppSelector((state) => state.app.screenWidth);
+  const windowOuterWidth = useAppSelector((state) => state.app.windowOuterWidth);
+  const searchedMoviesInStore = useAppSelector((state) => state.movie.searchedMovies);
+  const searchBy = useAppSelector((state) => state.movie.searchBy);
+  const [searchedMovies, setSearchedMovies] = useState([]);
+  const [highRatingMovies, setHighRatingMovies] = useState([]);
+  const [showedMovies, setShowedMovies] = useState([]);
+  const [isHighRatingMovies, setIsHighRatingMovies] = useState(false);
   const searchedMoviesCount = searchedMovies ? searchedMovies.length : 0;
   const bigScreenLayout = (screenWidth > BIG_SCREEN || windowOuterWidth > BIG_SCREEN) && searchedMoviesCount >= BIG_SCREEN_MOVIES_QTY;
   const middleScreenLayout = ((screenWidth > SMALL_SCREEN && screenWidth <= BIG_SCREEN) || (windowOuterWidth > SMALL_SCREEN && windowOuterWidth <= BIG_SCREEN)) && searchedMoviesCount >= MIDDLE_SCREEN_MOVIES_QTY;
   const smallScreenLayout = (screenWidth <= SMALL_SCREEN || windowOuterWidth <= SMALL_SCREEN) && searchedMoviesCount >= SMALL_SCREEN_MOVIES_QTY;
-  const [showedMovies, setShowedMovies] = useState(() => {
-    if (bigScreenLayout) {
-      return searchedMovies.slice(0, BIG_SCREEN_MOVIES_QTY);
-    } else if (middleScreenLayout) {
-      return searchedMovies.slice(0, MIDDLE_SCREEN_MOVIES_QTY);
-    } else if (smallScreenLayout) {
-      return searchedMovies.slice(0, SMALL_SCREEN_MOVIES_QTY);
-    } else {
-      return searchedMovies
-    }
-  });
 
-  function toggleShortMoviesFilter() {
-    setIsShortMovies(!isShortMovies);
-    const searchInput = localStorage.getItem('searchInput');
-    const movies = JSON.parse(localStorage.getItem('movies'));
-    if (!searchInput && !movies) {
-      return null
-    } else if (!isShortMovies && searchedMovies) {
-      let showedShortMovies = showShortMovies(searchedMovies);
-      if (showedShortMovies === null) {
-        showedShortMovies = [];
+  // There are 3 states used to show the movies:
+  // searchedMoviesInStore - movies from the store (all pages)
+  // searchedMovies - movies from the store (current page)
+  // highRatingMovies - movies from the store (current page) with rating >= 6
+  // showedMovies - movies from the store (current page) with rating >= 6
+  // and quantity depends on the screen width
+  // isHighRatingMovies - flag to show all movies or only with rating >= 6
+
+  // hook to update the searchedMovies and highRatingMovies when the page is changed or the search query is changed
+  useEffect(() => {
+    if (Object.keys(searchedMoviesInStore).length > 0) {
+      setSearchedMovies(searchedMoviesInStore[currentSearch][currentPage]);
+      setHighRatingMovies(showHighRatingMovies(searchedMoviesInStore[currentSearch][currentPage], 'vote_average'));
+    }
+  }, [currentPage, currentSearch, searchedMoviesInStore, searchBy]);
+
+  // hook to update the showedMovies when the screen width is changed
+  useEffect(() => {
+    if (Object.keys(searchedMoviesInStore).length > 0) {
+      const moviesToShow = isHighRatingMovies ? highRatingMovies : searchedMovies;
+      if (bigScreenLayout) {
+        setShowedMovies(moviesToShow.slice(0, BIG_SCREEN_MOVIES_QTY));
+      } else if (middleScreenLayout) {
+        setShowedMovies(moviesToShow.slice(0, MIDDLE_SCREEN_MOVIES_QTY));
+      } else if (smallScreenLayout) {
+        setShowedMovies(moviesToShow.slice(0, SMALL_SCREEN_MOVIES_QTY));
+      } else {
+        setShowedMovies(moviesToShow);
       }
-      saveToLocalStorage(showedShortMovies, !isShortMovies, searchInput);
-      setSearchedMovies(showedShortMovies);
-    } else {
-      const showedMovies = searchMovies(movies, !isShortMovies, searchInput);
-      saveToLocalStorage(showedMovies, !isShortMovies, searchInput);
-      setSearchedMovies(showedMovies);
     }
+  }, [highRatingMovies, searchedMovies, searchedMoviesInStore, isHighRatingMovies])
+
+  function toggleHighRatingMovies() {
+    setIsHighRatingMovies(!isHighRatingMovies);
   }
 
-  function traceScreenWidth() {
-    setScreenWidth(window.screen.width);
-  }
-
-  function traceWindowOuterWidth() {
-    setWindowOuterWidth(window.outerWidth);
-  }
-
+  // function to show more movies when the button is clicked
   function handleShowMoreMoviesClick() {
+    let movies = isHighRatingMovies ? highRatingMovies : searchedMovies;
     if (screenWidth > BIG_SCREEN || windowOuterWidth > BIG_SCREEN) {
-      setShowedMovies(searchedMovies.slice(0, showedMovies.length + MORE_MOVIES_BIG_SCREEN_QTY))
+      setShowedMovies(movies.slice(0, showedMovies.length + MORE_MOVIES_BIG_SCREEN_QTY))
     } else {
-      setShowedMovies(searchedMovies.slice(0, showedMovies.length + MORE_MOVIES_SMALL_SCREEN_QTY))
+      setShowedMovies(movies.slice(0, showedMovies.length + MORE_MOVIES_SMALL_SCREEN_QTY))
     }
   }
-
-  useEffect(() => {
-    const searchedMoviesInLS = localStorage.getItem('searchedMovies');
-    const isShortMoviesInLS = localStorage.getItem('isShortMovies');
-    if (searchedMoviesInLS !== null && isShortMoviesInLS !== null) {
-      setSearchedMovies(JSON.parse(searchedMoviesInLS));
-      setIsShortMovies(JSON.parse(isShortMoviesInLS));
-    }
-  }, [searchCount])
-
-  useEffect(() => {
-    window.addEventListener('resize', traceScreenWidth);
-    return () => {
-      window.removeEventListener('resize', traceScreenWidth)
-    }
-  }, [])
-
-  useEffect(() => {
-    window.addEventListener('resize', traceWindowOuterWidth)
-    return () => {
-      window.removeEventListener('resize', traceWindowOuterWidth)
-    }
-  }, [])
-
-  useEffect(() => {
-    if (bigScreenLayout) {
-      setShowedMovies(searchedMovies.slice(0, BIG_SCREEN_MOVIES_QTY))
-    } else if (middleScreenLayout) {
-      setShowedMovies(searchedMovies.slice(0, MIDDLE_SCREEN_MOVIES_QTY));
-    } else if (smallScreenLayout) {
-      setShowedMovies(searchedMovies.slice(0, SMALL_SCREEN_MOVIES_QTY));
-    } else {
-      setShowedMovies(searchedMovies);
-    }
-  }, [screenWidth, windowOuterWidth, searchedMovies, isShortMovies])
-
 
   if (isLoading) {
     return (<>
-      <SearchForm isShortMovies={isShortMovies}
+      <SearchForm isHighRatingMovies={isHighRatingMovies}
                   onSearchMovies={onSearchMovies}
                   searchCount={searchCount}
-                  onToggle={toggleShortMoviesFilter}/>
+                  onToggle={toggleHighRatingMovies}/>
       <div className={'movies'}>
         <Preloader movies={true}/>
       </div>
     </>)
   } else if (errorMessage) {
     return (<>
-      <SearchForm isShortMovies={isShortMovies}
+      <SearchForm isHighRatingMovies={isHighRatingMovies}
                   onSearchMovies={onSearchMovies}
-                  searchCount={searchCount}
-                  onToggle={toggleShortMoviesFilter}/>
+                  onToggle={toggleHighRatingMovies}/>
       <div className={'movies'}>
         <SearchNotification content={errorMessage}/>
       </div>
     </>)
   } else {
     return (<>
-      <SearchForm isShortMovies={isShortMovies}
+      <SearchForm isHighRatingMovies={isHighRatingMovies}
                   onSearchMovies={onSearchMovies}
                   searchCount={searchCount}
-                  onToggle={toggleShortMoviesFilter}/>
+                  onToggle={toggleHighRatingMovies}/>
       <div className={'movies'}>
-        {(searchedMoviesCount === 0 && searchCount !== 0) ?
-          <SearchNotification content={'Ничего не найдено'}/> :
+        {searchCount !== 0 && showedMovies.length === 0 ?
+          <SearchNotification content={'Nothing was found.'}/> :
           <MoviesCardList onLike={onLike}
-                          showedMovies={showedMovies}
-                          savedMovies={savedMovies}/>}
-        {(showedMovies && searchedMoviesCount !== showedMovies.length) ?
+                          showedMovies={showedMovies}/>}
+        {(!isHighRatingMovies && searchedMovies.length !== showedMovies.length) || (isHighRatingMovies && showedMovies.length !== highRatingMovies.length) ?
           <div className={'movies__more-films'}>
             <button type={'button'}
                     onClick={handleShowMoreMoviesClick}
-                    className={'movies__more-films-button'}>Еще
+                    className={'movies__more-films-button'}>Show more
             </button>
           </div> : null}
       </div>
+      {(showedMovies.length !== 0) ? <Pagination onPageChange={onPageChange}
+                                                 currentPage={currentPage}
+                                                 totalPageCount={totalPageCount}
+                                                 siblingCount={1}/> : null}
     </>)
   }
 }

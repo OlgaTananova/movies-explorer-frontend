@@ -2,21 +2,21 @@ import './Portfolio.css';
 
 function Portfolio() {
   return (< div className={'portfolio'}>
-      <h3 className={'portfolio__heading'}>Портфолио</h3>
+      <h3 className={'portfolio__heading'}>Other project completed within the web-development course:</h3>
       <nav className={'portfolio__links'}>
         <a className={'portfolio__link'}
-           href={'https://github.com/OlgaTananova/how-to-learn'}
+           href={'https://olgatananova.github.io/how-to-learn/'}
            target={'_blank'}
-           rel={'noreferrer'}>Статичный сайт</a>
+           rel={'noreferrer'}>Landing page</a>
         <a className={'portfolio__link'}
            rel={'noreferrer'}
-           href={'https://github.com/OlgaTananova/russian-travel'}
+           href={'https://olgatananova.github.io/russian-travel/index.html'}
            target={'_blank'}>
-          Адаптивный сайт</a>
+          Landing page with adaptive layout</a>
         <a className={'portfolio__link portfolio__link_last'}
            rel={'noreferrer'}
-           href={'https://github.com/OlgaTananova/react-mesto-api-full'}
-           target={'_blank'}>Одностраничное приложение</a>
+           href={'https://olgatananova.github.io/react-mesto-auth/'}
+           target={'_blank'}>Single-page application</a>
       </nav>
     </div>)
 }

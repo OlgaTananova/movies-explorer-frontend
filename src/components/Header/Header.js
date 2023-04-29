@@ -3,12 +3,12 @@ import logo from '../../images/logo.svg'
 import Navigation from '../Navigation/Navigation';
 import {useLocation, Link} from 'react-router-dom';
 
-function Header({isLoggedIn}) {
+function Header({isLoggedIn, screenWidth, windowOuterWidth}) {
   const location = useLocation();
 
   function Logo() {
     return (<Link to={'/'}><img className='logo'
-                                      alt='Логотип проекта'
+                                      alt='Project logo'
                                       src={logo}/></Link>)
   }
 
@@ -16,7 +16,7 @@ function Header({isLoggedIn}) {
     return (<header className={`header ${(!isLoggedIn) ? 'header_promo' : ''}`}>
         <div className='section section_type_header '>
           <Logo/>
-          <Navigation isLoggedIn={isLoggedIn}/>
+          <Navigation screenWidth={screenWidth} windowOuterWidth={windowOuterWidth} isLoggedIn={isLoggedIn}/>
         </div>
       </header>)
   } else if (location.pathname === '/signup' || location.pathname === '/signin') {

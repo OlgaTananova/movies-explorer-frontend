@@ -1,76 +1,76 @@
 import './MoviesCard.css';
 import {useLocation} from 'react-router-dom';
-import {MOVIE_IMAGE_BASE_URL, MINUTES_IN_HOUR} from '../../utils/utils';
+import {MOVIE_IMAGE_BASE_URL, MOVIES_DETAILS_BASE_URL} from '../../utils/utils';
+import {useEffect, useState} from 'react';
 
-function MoviesCard(props) {
+function MoviesCard({
+                      poster_path,
+                      id,
+                      title,
+                      release_date,
+                      vote_average,
+                      overview,
+                      onLike,
+                      onDislike,
+                      savedMovies,
+                      image
+                    }) {
   const location = useLocation();
-  const {
-    country,
-    director,
-    duration,
-    year,
-    description,
-    trailerLink,
-    nameRU,
-    nameEN,
-    id,
-    onLike,
-    onDislike
-  } = props;
-  const image = location.pathname === '/saved-movies' ? props.image : `${MOVIE_IMAGE_BASE_URL}${props.image.url}`;
-  const thumbnail = location.pathname === '/saved-movies' ? props.thumbnail : `${MOVIE_IMAGE_BASE_URL}${props.image.formats.thumbnail.url}`;
-  const isLiked = props.savedMovies.some((movie) => {
-    return movie.movieId === id;
-  });
+  const imageSrc = location.pathname !== '/saved-movies' ? `${MOVIE_IMAGE_BASE_URL}/${poster_path}`: image;
+  const [isLiked, setIsLiked] = useState(false);
 
-  function displayDuration() {
-    if (duration < MINUTES_IN_HOUR) {
-      return duration
+  useEffect(() => {
+    const likedMovie = savedMovies.find((movie) => {
+      return movie.id === id;
+    });
+    if (likedMovie) {
+      setIsLiked(true)
+    } else {
+      setIsLiked(false);
     }
-    const hours = Math.floor(duration / MINUTES_IN_HOUR);
-    const minutes = duration - (MINUTES_IN_HOUR * hours);
-    return {hours, minutes}
-  }
+  }, [savedMovies])
 
   function handleLike() {
     onLike({
-      country,
-      director,
-      duration,
-      year,
-      description,
-      image,
-      trailerLink,
-      thumbnail,
-      nameRU,
-      nameEN,
-      id
+      id: id,
+      title: title,
+      year: release_date.slice(0, 4),
+      rating: vote_average,
+      image: imageSrc,
+      overview: overview,
+      descriptionLink: `${MOVIES_DETAILS_BASE_URL}/${id}`,
     })
   }
 
   function handleDislike() {
-    onDislike(props._id)
+    const dislikedMovie = savedMovies.find((movie) => {
+      return movie.id === id;
+    })
+    onDislike(dislikedMovie._id)
   }
 
   return (<div className={'movies-card'}>
-    <a className={'movies-card__trailer-link'}
+    <a className={'movies-card__tmdb-link'}
        target={'_blank'}
        rel='noreferrer'
-       href={trailerLink}><img className={'movies-card__image'}
-                               alt={`Обложка фильма: ${nameRU}`}
-                               src={`${image}`}/></a>
+       href={`${MOVIES_DETAILS_BASE_URL}/${id}`}>
+      <div className={'movies-card__image-block'}>
+        <img className={'movies-card__image'}
+             alt={`Poster: ${title}`}
+             src={`${imageSrc}`}/></div>
+    </a>
     <div className={'movies-card__description'}>
-      <h3 className={'movies-card__heading'}>{nameRU}</h3>
+      <h3 className={'movies-card__heading'}>{title}</h3>
       {location.pathname === '/saved-movies' ? <button type={'button'}
                                                        className={'movies-card__button movies-card__button_type_delete'}
                                                        onClick={handleDislike}
-                                                       aria-label={'Иконка удаление фильма из списка сохраненных фильмов'}>{}</button> :
+                                                       aria-label={'Like&Dislike button'}>{}</button> :
         <button type={'button'}
-                aria-label={'Иконка сохранения фильма в список сохраненных фильмов'}
-                className={`movies-card__button movies-card__button_type_like ${isLiked&& 'movies-card__button_type_like_liked'}`}
+                aria-label={'Like&Dislike button'}
+                className={`movies-card__button movies-card__button_type_like ${isLiked && 'movies-card__button_type_like_liked'}`}
                 onClick={handleLike}>{}</button>}
     </div>
-    <p className={'movies-card__duration'}>{duration < MINUTES_IN_HOUR ? `${displayDuration()}м` : `${displayDuration().hours}ч ${displayDuration().minutes}м`}</p>
+    <p className={'movies-card__rating'}>{vote_average}</p>
   </div>)
 
 }

@@ -1,0 +1,11 @@
+.main-heading {
+  margin: auto 70px;
+  font-size: 20px;
+  font-weight: 400;
+}
+
+@media screen and (max-width: 769px) {
+  .main-heading {
+    margin: auto 30px;
+  }
+}

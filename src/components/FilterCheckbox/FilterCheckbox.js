@@ -1,19 +1,19 @@
 import './FilterCheckbox.css';
 
-function FilterCheckbox({isShortMovies, onToggle, disabled}) {
+function FilterCheckbox({isHighRatingMovies, onToggle, disabled}) {
 
   function FilterButton() {
     return (
-      <button className={`short-movies-filter__button ${isShortMovies && 'short-movies-filter__button_active'}`}
+      <button className={`high-rating-filter__button ${isHighRatingMovies && 'high-rating-filter__button_active'}`}
               onClick={onToggle}
               type={'button'}
               disabled={disabled}
-              aria-label={'Переключатель короткометражных фильмов'}>{}</button>)
+              aria-label={'Toggle-button to filter high-rating movies'}>{}</button>)
   }
 
-  return (<div className={'short-movies-filter'}>
+  return (<div className={'high-rating-filter'}>
       <FilterButton/>
-      <span className={'short-movies-filter__button-name'}>Короткометражки</span>
+      <span className={'high-rating-filter__button-name'}>Movies with high rating</span>
     </div>)
 }
 

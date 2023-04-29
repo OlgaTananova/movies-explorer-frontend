@@ -88,17 +88,13 @@ export const saveMovie = (movie) => {
     method: 'POST', headers: {
       "Content-Type": "application/json"
     }, credentials: 'include', body: JSON.stringify({
-      "country": movie.country,
-      "director": movie.director,
-      "duration": movie.duration,
+      "rating": movie.rating,
       "year": movie.year,
-      "description": movie.description,
+      "title": movie.title,
+      "overview": movie.overview,
       "image": movie.image,
-      "trailerLink": movie.trailerLink,
-      "nameRU": movie.nameRU,
-      "nameEN": movie.nameEN,
-      "thumbnail": movie.thumbnail,
-      "movieId": movie.id
+      "descriptionLink": movie.descriptionLink,
+      "id": movie.id,
     })
   })
     .then((res) => {
