@@ -3,7 +3,7 @@ import ReactDOM from 'react-dom/client';
 import './index.css';
 import App from './components/App/App';
 import reportWebVitals from './reportWebVitals';
-import {BrowserRouter} from 'react-router-dom';
+import {HashRouter} from 'react-router-dom';
 import ErrorBoundary from './utils/ErrorBoundary';
 import {store} from './store/store';
 import {Provider} from 'react-redux';
@@ -24,13 +24,13 @@ store.dispatch(checkUser()).unwrap()
 
 root.render(<React.StrictMode>
   <Provider store={store}>
-    <BrowserRouter>
+    <HashRouter>
       <ErrorBoundary fallback={<div>
         <h1>Something went wrong.</h1>
       </div>}>
         <App/>
       </ErrorBoundary>
-    </BrowserRouter>
+    </HashRouter>
   </Provider>
 </React.StrictMode>);
 reportWebVitals();
