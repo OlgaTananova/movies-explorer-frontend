@@ -25,11 +25,11 @@ store.dispatch(checkUser()).unwrap()
 root.render(<React.StrictMode>
   <Provider store={store}>
     <BrowserRouter>
-      {/*<ErrorBoundary fallback={<div>*/}
-      {/*  <h1>Something went wrong.</h1>*/}
-      {/*</div>}>*/}
+      <ErrorBoundary fallback={<div>
+        <h1>Something went wrong.</h1>
+      </div>}>
         <App/>
-      {/*</ErrorBoundary>*/}
+      </ErrorBoundary>
     </BrowserRouter>
   </Provider>
 </React.StrictMode>);
