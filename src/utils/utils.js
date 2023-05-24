@@ -1,9 +1,9 @@
-import {useAppSelector} from '../store/hooks';
 
 export const MOVIE_IMAGE_BASE_URL = 'https://image.tmdb.org/t/p/original';
 export const MOVIES_BASE_URL = 'https://api.themoviedb.org/3';
 export const MOVIES_DETAILS_BASE_URL = 'https://www.themoviedb.org/movie';
-export const BASE_URL = 'http://localhost:3000';
+// export const BASE_URL = 'http://localhost:3000';
+export const BASE_URL = 'https://movie-explorer-api.onrender.com';
 export const HIGH_RATING = 6;
 export const BIG_SCREEN_MOVIES_QTY = 12;
 export const MIDDLE_SCREEN_MOVIES_QTY = 8;
