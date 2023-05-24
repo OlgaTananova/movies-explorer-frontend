@@ -15,8 +15,10 @@ function AboutMe() {
               As a web developer, I value teamwork and communication, and I'm always willing to help my colleagues. I have strong interpersonal skills and I'm receptive to constructive feedback. I bring a strong work ethic and attention to detail to my work, and I'm committed to creating quality work. I'm eager to apply my skills and knowledge to a new role and grow as a web developer. </p>
             <nav className={'about-me__info-links'}>
               <a className={'about-me__info-link'}
+                 target={'_blank'}
                  href={'https://www.linkedin.com/in/olga-tananova-9aba0b237/'}>LinkedIn</a>
               <a className={'about-me__info-link'}
+                 target={'_blank'}
                  href={'https://github.com/OlgaTananova'}>GitHub</a>
             </nav>
           </article>

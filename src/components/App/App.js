@@ -32,12 +32,10 @@ import {
   setSearchCount,
   searchMovies,
   searchMoviesByPerson,
-  setSearchBy,
   fetchSavedMovies,
   likeMovie,
   dislikeMovie
 } from '../../store/movieSlice';
-import {deleteMovie} from '../../utils/MainApi';
 
 function App() {
   const isUserChecked = useAppSelector((state) => state.app.isUserChecked);
